@@ -29,7 +29,7 @@ Without `CLINICIAN_KEYS`, development mode uses a built-in dev key (shown in the
 
 1. Push this folder to a GitHub repository.
 2. In Railway: New Project, Deploy from GitHub repo. Railway uses the `Dockerfile` and `railway.json`.
-3. Set variables: `NODE_ENV=production`, `CLINICIAN_KEYS=<key1>,<key2>` (one key per clinician or clinic, 16+ characters).
+3. Set variables: `NODE_ENV=production` and either `OPEN_ACCESS=true` or `CLINICIAN_KEYS=<key1>,<key2>` (16+ characters each).
 4. Generate a domain under Settings, Networking. Open it and sign in with a key.
 
 Sessions live in memory and are erased after `SESSION_TTL_HOURS` (default 24) or on restart. This is deliberate: no patient data sits in a database. See `docs/ARCHITECTURE.md` before changing it.
@@ -40,8 +40,12 @@ Cautions: Vercel is serverless, so memory sessions do not work. Use `STORE_DRIVE
 
 1. Push this folder to GitHub and import it in Vercel (Framework Preset: Other). `vercel.json` sets the build and routes.
 2. Add Upstash Redis from Vercel, Storage (Marketplace). It injects `KV_REST_API_URL` and `KV_REST_API_TOKEN`.
-3. Set environment variables: `NODE_ENV=production`, `STORE_DRIVER=redis`, `CLINICIAN_KEYS=<key1>,<key2>`, `SESSION_TTL_HOURS=24`.
+3. Set environment variables: `NODE_ENV=production`, `STORE_DRIVER=redis`, `OPEN_ACCESS=true` (or `CLINICIAN_KEYS=<key1>,<key2>`), `SESSION_TTL_HOURS=24`.
 4. Deploy, open the URL and sign in. `GET /ready` should return `ready`.
+
+## Access: no key, or keys
+
+By default Sukoon needs an access key. For an open, welcome-and-start experience set `OPEN_ACCESS=true` and no key is asked. Anyone with the link can then run sessions, and sessions still erase themselves after the retention period. Keep the link private, or leave `OPEN_ACCESS` off and use `CLINICIAN_KEYS`.
 
 ## Documentation
 

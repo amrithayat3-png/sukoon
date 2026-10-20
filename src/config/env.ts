@@ -26,6 +26,7 @@ const EnvSchema = z.object({
   WEB_DIR: z.string().min(1).default('./web'),
   RATE_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(300),
   AI_ENABLED: booleanString.default('false'),
+  OPEN_ACCESS: booleanString.default('false'),
 });
 
 export interface Config {
@@ -46,6 +47,8 @@ export interface Config {
   readonly webDir: string;
   readonly rateLimitPerMinute: number;
   readonly aiEnabled: boolean;
+  /** When true, no access key is needed. Anyone with the link can run sessions. */
+  readonly openAccess: boolean;
 }
 
 export class ConfigError extends Error {
@@ -78,11 +81,15 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   let clinicianKeys = configured;
   let usingDevKey = false;
   if (configured.length === 0) {
-    if (e.NODE_ENV === 'production') {
-      throw new ConfigError('CLINICIAN_KEYS is required in production. Run: npm run keygen');
+    if (e.OPEN_ACCESS) {
+      clinicianKeys = [];
+    } else {
+      if (e.NODE_ENV === 'production') {
+        throw new ConfigError('CLINICIAN_KEYS is required in production unless OPEN_ACCESS=true. Run: npm run keygen');
+      }
+      clinicianKeys = [DEV_KEY];
+      usingDevKey = true;
     }
-    clinicianKeys = [DEV_KEY];
-    usingDevKey = true;
   }
 
   const resolve = (dir: string): string => path.resolve(process.cwd(), dir);
@@ -105,6 +112,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     webDir: resolve(e.WEB_DIR),
     rateLimitPerMinute: e.RATE_LIMIT_PER_MINUTE,
     aiEnabled: e.AI_ENABLED,
+    openAccess: e.OPEN_ACCESS,
   };
 }
 

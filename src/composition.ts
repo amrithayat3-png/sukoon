@@ -80,6 +80,7 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
     createHealthPillar({
       appName: config.appName,
       appVersion: config.appVersion,
+      openAccess: config.openAccess,
       checks: [
         {
           name: 'catalog',
@@ -108,7 +109,12 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
     sessions,
     catalog,
     events,
-    authenticate: (header) => keyRing.authenticate(header),
+    authenticate: (header) => {
+      if (!config.openAccess) return keyRing.authenticate(header);
+      // Open access: a valid key still maps to its own id, everyone else shares one.
+      const token = header?.startsWith('Bearer ') ? header.slice(7).trim() : undefined;
+      return keyRing.verify(token) ?? { keyId: 'open', role: 'clinician' };
+    },
     start: () => sweeper.start(),
     stop: async () => {
       sweeper.stop();

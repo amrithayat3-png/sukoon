@@ -1,0 +1,157 @@
+{
+  "id": "adults-low-mood",
+  "version": "0.1.0",
+  "track": "adults",
+  "audience": [
+    "general"
+  ],
+  "title": "Low Mood and Motivation",
+  "summary": "Low or flat mood, energy and motivation, self-worth, and what still brings joy. Includes one safety question.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "kroenke-2001-phq9",
+    "spitzer-2006-gad7",
+    "naccho-aces"
+  ],
+  "clinicianNotes": "Contains a safety item that raises a clinician flag. Agree your response protocol before use. Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "mood",
+      "label": "Low mood",
+      "description": "Feeling down, flat or empty.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On low mood, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On low mood, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask how long the low mood has lasted and what lifts it, even briefly.",
+        "explore": "On low mood, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask how long the low mood has lasted and what lifts it, even briefly."
+      }
+    },
+    {
+      "id": "motivation",
+      "label": "Energy and motivation",
+      "description": "The effort needed to start and finish daily tasks.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On energy and motivation, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On energy and motivation, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore which tasks have become hardest and what support would help.",
+        "explore": "On energy and motivation, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore which tasks have become hardest and what support would help."
+      }
+    },
+    {
+      "id": "worth",
+      "label": "Self-worth",
+      "description": "Harsh self-judgement and guilt.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On self-worth, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On self-worth, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore the voice of self-criticism and where it comes from.",
+        "explore": "On self-worth, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore the voice of self-criticism and where it comes from."
+      }
+    },
+    {
+      "id": "joy",
+      "label": "Joy and interest",
+      "description": "Enjoyment, things to look forward to, and hope.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On joy and interest, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On joy and interest, support is partly in place. Explore what helps and what gets in the way. Explore small activities that still bring some pleasure.",
+        "explore": "On joy and interest, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore small activities that still bring some pleasure."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "moo1",
+      "domain": "mood",
+      "text": "I feel down, flat or empty for much of the day."
+    },
+    {
+      "id": "moo2",
+      "domain": "mood",
+      "text": "I feel sad without a clear reason."
+    },
+    {
+      "id": "moo3",
+      "domain": "mood",
+      "text": "Small things make me tearful or hopeless."
+    },
+    {
+      "id": "mot1",
+      "domain": "motivation",
+      "text": "It takes a big effort to start everyday tasks."
+    },
+    {
+      "id": "mot2",
+      "domain": "motivation",
+      "text": "I keep putting off things I used to manage."
+    },
+    {
+      "id": "mot3",
+      "domain": "motivation",
+      "text": "I move through the day feeling slowed down."
+    },
+    {
+      "id": "wor1",
+      "domain": "worth",
+      "text": "I am hard on myself and feel I let people down."
+    },
+    {
+      "id": "wor2",
+      "domain": "worth",
+      "text": "I feel like a burden to others."
+    },
+    {
+      "id": "wor3",
+      "domain": "worth",
+      "text": "I feel guilty about things that are not my fault."
+    },
+    {
+      "id": "joy1",
+      "domain": "joy",
+      "text": "I still enjoy at least some of my usual activities."
+    },
+    {
+      "id": "joy2",
+      "domain": "joy",
+      "text": "I look forward to something in the week ahead."
+    },
+    {
+      "id": "joy3",
+      "domain": "joy",
+      "text": "I feel hopeful that things can improve."
+    },
+    {
+      "id": "mood-safety",
+      "domain": "mood",
+      "text": "I have had thoughts that life is not worth living, or of harming myself.",
+      "safety": true,
+      "scored": false
+    }
+  ]
+}

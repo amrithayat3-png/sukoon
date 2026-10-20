@@ -1,3 +1,5 @@
+import { state } from './state.js';
+
 const KEY_STORE = 'sukoon.key';
 let memoryKey = null;
 
@@ -42,7 +44,7 @@ async function request(method, path, body, keyOverride) {
   if (res.status === 204) return null;
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    if (res.status === 401 && !keyOverride) {
+    if (res.status === 401 && !keyOverride && !state.open) {
       keyStore.clear();
       location.hash = '#/login';
     }
@@ -52,6 +54,7 @@ async function request(method, path, body, keyOverride) {
 }
 
 export const api = {
+  meta: () => request('GET', '/api/v1/meta'),
   verify: (key) => request('POST', '/api/v1/auth/verify', undefined, key),
   tracks: () => request('GET', '/api/v1/tracks'),
   packs: (trackId) => request('GET', `/api/v1/tracks/${encodeURIComponent(trackId)}/packs`),

@@ -1,0 +1,150 @@
+{
+  "id": "adults-men-pressure",
+  "version": "0.1.0",
+  "track": "adults",
+  "audience": [
+    "men"
+  ],
+  "title": "Men's Pack: Pressure and Reaching Out",
+  "summary": "Provider pressure, keeping feelings in, looking after health, and openness to support. Written for conversations with adult men.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "kroenke-2001-phq9",
+    "spitzer-2006-gad7",
+    "naccho-aces"
+  ],
+  "clinicianNotes": "Many men describe these pressures, but individuals differ. Avoid assuming; let the client say what applies. Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "provider",
+      "label": "Provider pressure",
+      "description": "Pressure to be strong and earn enough.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On provider pressure, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On provider pressure, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore where these expectations came from and which ones the person chooses to keep.",
+        "explore": "On provider pressure, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore where these expectations came from and which ones the person chooses to keep."
+      }
+    },
+    {
+      "id": "feelings",
+      "label": "Keeping feelings in",
+      "description": "Not talking about feelings or avoiding them.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On keeping feelings in, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On keeping feelings in, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore what makes it hard to talk and who feels safe enough.",
+        "explore": "On keeping feelings in, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore what makes it hard to talk and who feels safe enough."
+      }
+    },
+    {
+      "id": "health",
+      "label": "Looking after health",
+      "description": "Ignoring body signals or relying on unhelpful coping.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On looking after health, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On looking after health, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask about physical health, substances and the habits used to cope.",
+        "explore": "On looking after health, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask about physical health, substances and the habits used to cope."
+      }
+    },
+    {
+      "id": "reach",
+      "label": "Reaching out",
+      "description": "Having someone to talk to and openness to help.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On reaching out, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On reaching out, support is partly in place. Explore what helps and what gets in the way. Build on any trusted person or openness to professional support.",
+        "explore": "On reaching out, support looks thin. Explore what is missing, who or what could help, and small first steps. Build on any trusted person or openness to professional support."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "pro1",
+      "domain": "provider",
+      "text": "I feel I must always be the strong one for my family."
+    },
+    {
+      "id": "pro2",
+      "domain": "provider",
+      "text": "Money worries weigh on me more than I admit."
+    },
+    {
+      "id": "pro3",
+      "domain": "provider",
+      "text": "I feel judged by how much I earn or achieve."
+    },
+    {
+      "id": "fee1",
+      "domain": "feelings",
+      "text": "I do not talk about how I really feel."
+    },
+    {
+      "id": "fee2",
+      "domain": "feelings",
+      "text": "I was taught that showing emotion is weakness."
+    },
+    {
+      "id": "fee3",
+      "domain": "feelings",
+      "text": "I switch to work, screens or sport to avoid my feelings."
+    },
+    {
+      "id": "hea1",
+      "domain": "health",
+      "text": "I ignore pain, tiredness or health worries."
+    },
+    {
+      "id": "hea2",
+      "domain": "health",
+      "text": "I delay seeing a doctor or counsellor."
+    },
+    {
+      "id": "hea3",
+      "domain": "health",
+      "text": "I rely on smoking, energy drinks or late nights to cope."
+    },
+    {
+      "id": "rea1",
+      "domain": "reach",
+      "text": "There is a man or friend I can talk to honestly."
+    },
+    {
+      "id": "rea2",
+      "domain": "reach",
+      "text": "I would be open to speaking to a professional about stress."
+    },
+    {
+      "id": "rea3",
+      "domain": "reach",
+      "text": "I feel able to ask for help when I need it."
+    }
+  ]
+}

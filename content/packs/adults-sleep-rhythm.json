@@ -1,0 +1,150 @@
+{
+  "id": "adults-sleep-rhythm",
+  "version": "0.1.0",
+  "track": "adults",
+  "audience": [
+    "general"
+  ],
+  "title": "Sleep and Daily Rhythm",
+  "summary": "Falling and staying asleep, daytime energy, screen habits and the routines that help rest.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "kroenke-2001-phq9",
+    "spitzer-2006-gad7",
+    "naccho-aces"
+  ],
+  "clinicianNotes": "Persistent sleep problems may need a medical review alongside psychological support. Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "falling",
+      "label": "Falling and staying asleep",
+      "description": "Trouble getting to sleep or staying asleep.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On falling and staying asleep, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On falling and staying asleep, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask how long sleep has been difficult and what the person has tried.",
+        "explore": "On falling and staying asleep, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask how long sleep has been difficult and what the person has tried."
+      }
+    },
+    {
+      "id": "daytime",
+      "label": "Daytime energy",
+      "description": "Tiredness and foggy thinking during the day.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On daytime energy, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On daytime energy, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask about caffeine, naps and how tiredness affects mood and safety.",
+        "explore": "On daytime energy, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask about caffeine, naps and how tiredness affects mood and safety."
+      }
+    },
+    {
+      "id": "routine",
+      "label": "Screens and routine",
+      "description": "Late screens, irregular timing and bedtime worries.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On screens and routine, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On screens and routine, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore the evening routine and what is on the mind at bedtime.",
+        "explore": "On screens and routine, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore the evening routine and what is on the mind at bedtime."
+      }
+    },
+    {
+      "id": "winddown",
+      "label": "Wind-down habits",
+      "description": "A calm routine and a restful sleep space.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On wind-down habits, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On wind-down habits, support is partly in place. Explore what helps and what gets in the way. Explore one small habit to protect before bed.",
+        "explore": "On wind-down habits, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore one small habit to protect before bed."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "fal1",
+      "domain": "falling",
+      "text": "It takes me a long time to fall asleep."
+    },
+    {
+      "id": "fal2",
+      "domain": "falling",
+      "text": "I wake up in the night and struggle to go back to sleep."
+    },
+    {
+      "id": "fal3",
+      "domain": "falling",
+      "text": "I wake much earlier than I want to."
+    },
+    {
+      "id": "day1",
+      "domain": "daytime",
+      "text": "I feel sleepy or foggy during the day."
+    },
+    {
+      "id": "day2",
+      "domain": "daytime",
+      "text": "I rely on caffeine or naps to get through the day."
+    },
+    {
+      "id": "day3",
+      "domain": "daytime",
+      "text": "Tiredness makes me short-tempered."
+    },
+    {
+      "id": "rou1",
+      "domain": "routine",
+      "text": "I use my phone or TV in bed until I fall asleep."
+    },
+    {
+      "id": "rou2",
+      "domain": "routine",
+      "text": "My sleep and wake times change a lot from day to day."
+    },
+    {
+      "id": "rou3",
+      "domain": "routine",
+      "text": "Worries fill my mind as soon as I lie down."
+    },
+    {
+      "id": "win1",
+      "domain": "winddown",
+      "text": "I have a calming routine before bed."
+    },
+    {
+      "id": "win2",
+      "domain": "winddown",
+      "text": "My bedroom feels quiet, dark and comfortable."
+    },
+    {
+      "id": "win3",
+      "domain": "winddown",
+      "text": "I feel rested on most mornings."
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "id": "adults-loneliness",
+  "version": "0.1.0",
+  "track": "adults",
+  "audience": [
+    "general"
+  ],
+  "title": "Loneliness and Connection",
+  "summary": "Felt loneliness, pulling away from others, the people available and a sense of belonging.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "kroenke-2001-phq9",
+    "spitzer-2006-gad7",
+    "naccho-aces"
+  ],
+  "clinicianNotes": "Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "lonely",
+      "label": "Feeling lonely",
+      "description": "Loneliness even among other people.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On feeling lonely, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On feeling lonely, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask when loneliness is strongest and what kind of company is missing.",
+        "explore": "On feeling lonely, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask when loneliness is strongest and what kind of company is missing."
+      }
+    },
+    {
+      "id": "isolation",
+      "label": "Pulling away",
+      "description": "Withdrawing from invitations and conversation.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On pulling away, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On pulling away, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore what makes reaching out or accepting invitations hard.",
+        "explore": "On pulling away, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore what makes reaching out or accepting invitations hard."
+      }
+    },
+    {
+      "id": "people",
+      "label": "People around me",
+      "description": "Having people to call on and regular contact.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On people around me, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On people around me, support is partly in place. Explore what helps and what gets in the way. Explore who could be contacted this week.",
+        "explore": "On people around me, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore who could be contacted this week."
+      }
+    },
+    {
+      "id": "belong",
+      "label": "Belonging",
+      "description": "Feeling part of a group, community or family.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On belonging, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On belonging, support is partly in place. Explore what helps and what gets in the way. Explore groups or activities that could grow a sense of belonging.",
+        "explore": "On belonging, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore groups or activities that could grow a sense of belonging."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "lon1",
+      "domain": "lonely",
+      "text": "I feel lonely even when other people are around."
+    },
+    {
+      "id": "lon2",
+      "domain": "lonely",
+      "text": "I feel left out by friends, family or colleagues."
+    },
+    {
+      "id": "lon3",
+      "domain": "lonely",
+      "text": "I miss having someone to share ordinary moments with."
+    },
+    {
+      "id": "iso1",
+      "domain": "isolation",
+      "text": "I turn down invitations even when I would like to go."
+    },
+    {
+      "id": "iso2",
+      "domain": "isolation",
+      "text": "I go days without a real conversation."
+    },
+    {
+      "id": "iso3",
+      "domain": "isolation",
+      "text": "I spend most of my free time alone on a screen."
+    },
+    {
+      "id": "peo1",
+      "domain": "people",
+      "text": "There is at least one person I can call when I need to."
+    },
+    {
+      "id": "peo2",
+      "domain": "people",
+      "text": "I see or speak to friends or family regularly."
+    },
+    {
+      "id": "peo3",
+      "domain": "people",
+      "text": "Someone checks in on how I am really doing."
+    },
+    {
+      "id": "bel1",
+      "domain": "belong",
+      "text": "I feel part of a group, community or family."
+    },
+    {
+      "id": "bel2",
+      "domain": "belong",
+      "text": "I have a place where I am welcome as I am."
+    },
+    {
+      "id": "bel3",
+      "domain": "belong",
+      "text": "I have shared activities that I look forward to."
+    }
+  ]
+}

@@ -1,6 +1,8 @@
 import { api, keyStore } from '../api.js';
 import { h, mount, errorBox, pageTitle } from '../ui.js';
+import { logo } from '../icons.js';
 
+/** Only used when the server is configured to require an access key. */
 export function loginView(root) {
   pageTitle('Sign in');
   const input = h('input', { type: 'password', id: 'key', autocomplete: 'off', required: true, 'aria-describedby': 'key-hint' });
@@ -18,14 +20,11 @@ export function loginView(root) {
       slot.append(errorBox(err.status === 401 ? 'That access key was not recognised.' : err.message));
     } finally { submit.disabled = false; }
   } },
+    h('div', { class: 'row' }, logo(44), h('h2', { style: { margin: 0 } }, 'Welcome to Sukoon')),
     h('div', { class: 'field' },
-      h('label', { for: 'key' }, 'Clinician access key'),
+      h('label', { for: 'key' }, 'Access key'),
       input,
-      h('p', { class: 'hint', id: 'key-hint' }, 'Your key was issued to you by the Sukoon team. It stays in this browser tab only.')),
+      h('p', { class: 'hint', id: 'key-hint' }, 'Your key was issued to you by the Sukoon team.')),
     slot, submit);
-  mount(root,
-    h('div', { class: 'hero' },
-      h('h1', null, 'A calm companion for your sessions'),
-      h('p', null, 'Interactive check-ins and scenario activities that help a conversation start. Designed for use alongside a licensed psychologist.')),
-    h('div', { style: { maxWidth: '480px' } }, form));
+  mount(root, h('div', { style: { maxWidth: '480px', margin: '32px auto' } }, form));
 }

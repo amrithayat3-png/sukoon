@@ -1,0 +1,150 @@
+{
+  "id": "adults-relationships",
+  "version": "0.1.0",
+  "track": "adults",
+  "audience": [
+    "general"
+  ],
+  "title": "Relationships and Communication",
+  "summary": "Conflict, feeling heard, distance from loved ones, and trust and support at home.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "kroenke-2001-phq9",
+    "spitzer-2006-gad7",
+    "naccho-aces"
+  ],
+  "clinicianNotes": "Ask about safety at home if conflict is severe, and follow your own protocol. Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "conflict",
+      "label": "Conflict",
+      "description": "Arguments that escalate or repeat.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On conflict, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On conflict, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore the usual pattern of an argument and what each person needs.",
+        "explore": "On conflict, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore the usual pattern of an argument and what each person needs."
+      }
+    },
+    {
+      "id": "heard",
+      "label": "Feeling heard",
+      "description": "Being listened to and able to repair after conflict.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On feeling heard, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On feeling heard, support is partly in place. Explore what helps and what gets in the way. Explore moments when the person did feel heard.",
+        "explore": "On feeling heard, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore moments when the person did feel heard."
+      }
+    },
+    {
+      "id": "distance",
+      "label": "Distance and avoidance",
+      "description": "Feeling far from close people or avoiding hard talks.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On distance and avoidance, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On distance and avoidance, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask when the distance began and what feels risky about talking.",
+        "explore": "On distance and avoidance, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask when the distance began and what feels risky about talking."
+      }
+    },
+    {
+      "id": "trust",
+      "label": "Trust and support",
+      "description": "Having someone dependable and feeling appreciated.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On trust and support, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On trust and support, support is partly in place. Explore what helps and what gets in the way. Explore who is dependable and how the person could lean on them more.",
+        "explore": "On trust and support, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore who is dependable and how the person could lean on them more."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "con1",
+      "domain": "conflict",
+      "text": "Small disagreements turn into big arguments."
+    },
+    {
+      "id": "con2",
+      "domain": "conflict",
+      "text": "We go over the same fight again and again."
+    },
+    {
+      "id": "con3",
+      "domain": "conflict",
+      "text": "I hold things in until I explode."
+    },
+    {
+      "id": "hea1",
+      "domain": "heard",
+      "text": "I feel listened to by the people closest to me."
+    },
+    {
+      "id": "hea2",
+      "domain": "heard",
+      "text": "I can say what I really feel without being judged."
+    },
+    {
+      "id": "hea3",
+      "domain": "heard",
+      "text": "We find ways to fix things after an argument."
+    },
+    {
+      "id": "dis1",
+      "domain": "distance",
+      "text": "I feel distant from my partner or close family."
+    },
+    {
+      "id": "dis2",
+      "domain": "distance",
+      "text": "I avoid conversations that might cause conflict."
+    },
+    {
+      "id": "dis3",
+      "domain": "distance",
+      "text": "I spend more time alone at home than I would like."
+    },
+    {
+      "id": "tru1",
+      "domain": "trust",
+      "text": "I can count on someone close to me when things get hard."
+    },
+    {
+      "id": "tru2",
+      "domain": "trust",
+      "text": "I trust the people around me with my private worries."
+    },
+    {
+      "id": "tru3",
+      "domain": "trust",
+      "text": "I feel appreciated by the people I live with."
+    }
+  ]
+}

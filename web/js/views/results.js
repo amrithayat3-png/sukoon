@@ -1,5 +1,6 @@
 import { api } from '../api.js';
 import { BAND_LABEL, h, mount, link, errorBox, pageTitle } from '../ui.js';
+import { packIcon } from '../icons.js';
 
 export async function resultsView(root, sessionId) {
   pageTitle('Session summary');
@@ -19,23 +20,28 @@ export async function resultsView(root, sessionId) {
     mount(root,
       h('div', { class: 'crumbs noprint' }, link('#/', 'Home'), ' / Session summary'),
       h('div', { class: 'row between' },
-        h('div', null, h('h1', null, 'Session summary'),
-          h('p', { class: 'muted small' }, `Code ${session.code}`, session.alias ? ` · ${session.alias}` : '', ` · ${new Date(session.completedAt).toLocaleString()}`)),
+        h('div', { class: 'row' },
+          packIcon(results.packId),
+          h('div', null, h('h1', { style: { margin: 0 } }, 'Session summary'),
+            h('p', { class: 'muted small', style: { margin: 0 } }, `Code ${session.code}`, session.alias ? ` · ${session.alias}` : '', ` · ${new Date(session.completedAt).toLocaleString()}`))),
         h('div', { class: 'row noprint' },
           h('button', { class: 'btn ghost small', onClick: () => window.print() }, 'Print'),
           h('button', { class: 'btn ghost small', onClick: download }, 'Download JSON'))),
-      h('div', { class: 'notice' }, results.disclaimer),
-      results.status === 'draft' ? h('div', { class: 'notice' }, 'This pack is a draft. Bands are provisional and its content has not been reviewed by a licensed psychologist.') : null,
-      results.flags.length ? h('div', { class: 'stack' }, results.flags.map((f) =>
+      results.flags.length ? h('div', { class: 'stack', style: { marginTop: '16px' } }, results.flags.map((f) =>
         h('div', { class: 'flag', role: 'alert' }, h('h2', null, 'Needs your attention first'), h('p', null, f.message)))) : null,
-      h('div', { class: 'stack' }, results.domains.map((d) => {
+      h('div', { class: 'stack', style: { marginTop: '16px' } }, results.domains.map((d) => {
         const labels = BAND_LABEL[d.polarity] ?? BAND_LABEL.risk;
-        return h('section', { class: 'card domain' },
+        return h('section', { class: `card domain ${d.band}` },
           h('h3', null, d.label, h('span', { class: `chip ${d.band}` }, labels[d.band])),
           h('div', { class: `bar ${d.band}`, role: 'img', 'aria-label': `${d.label}: ${d.score} out of 100` }, h('span', { style: { width: `${d.score}%` } })),
           h('p', { class: 'small muted' }, `${d.score} / 100 · ${d.polarity === 'risk' ? 'higher means more to explore' : 'higher means stronger'}`),
           h('p', null, d.guidance));
       })),
+      h('details', { class: 'card noprint', style: { marginTop: '16px' } },
+        h('summary', null, 'About this summary'),
+        h('p', { style: { marginTop: '12px' } }, results.disclaimer),
+        results.status === 'draft' ? h('p', { class: 'small muted' }, 'Content status: draft. Bands are provisional and the content has not yet been reviewed by a licensed psychologist.') : null),
+      h('p', { class: 'print-only' }, results.disclaimer),
       h('div', { class: 'row noprint', style: { marginTop: '24px' } }, eraseBtn,
         h('span', { class: 'muted small' }, 'Sessions are also erased automatically when the retention period ends.')));
   } catch (err) {

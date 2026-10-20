@@ -57,7 +57,7 @@ describe('catalog', () => {
   it('lists tracks with pack counts and packs by track', async () => {
     const tracks = (asJson((await h.call('GET', '/api/v1/tracks')).body)['tracks'] as Json[]) ?? [];
     assert.equal(tracks.length, 4);
-    assert.equal(tracks.find((t) => t['id'] === 'adults')?.['packCount'], 1);
+    assert.equal(tracks.find((t) => t['id'] === 'adults')?.['packCount'], 10);
     assert.equal(tracks.find((t) => t['id'] === 'kids')?.['packCount'], 0);
     const packs = asJson((await h.call('GET', '/api/v1/tracks/teens/packs')).body)['packs'] as Json[];
     assert.equal(packs[0]?.['id'], 'teens-pressure-and-peers');
@@ -165,5 +165,28 @@ describe('routing', () => {
     const res = await h.call('GET', '/api/v1/nothing-here');
     assert.equal(res.status, 404);
     assert.equal(asJson(asJson(res.body)['error'])['code'], 'NOT_FOUND');
+  });
+});
+
+describe('open access mode', () => {
+  it('lets anyone use the API without a key, while keys keep working', async () => {
+    const { composePlatform } = await import('../src/composition.js');
+    const { dispatch } = await import('./helpers/dispatch.js');
+    const { testConfig } = await import('./helpers/platform.js');
+    const platform = await composePlatform(testConfig({ OPEN_ACCESS: 'true', CLINICIAN_KEYS: '' }));
+    const meta = await dispatch(platform, { method: 'GET', url: '/api/v1/meta' });
+    assert.equal(asJson(meta.body)['openAccess'], true);
+    const tracks = await dispatch(platform, { method: 'GET', url: '/api/v1/tracks' });
+    assert.equal(tracks.status, 200);
+    const created = await dispatch(platform, { method: 'POST', url: '/api/v1/sessions', body: { packId: 'adults-anger' } });
+    assert.equal(created.status, 201);
+  });
+
+  it('is off by default and refuses production without keys unless enabled', async () => {
+    const meta = asJson((await h.call('GET', '/api/v1/meta', { key: null })).body);
+    assert.equal(meta['openAccess'], false);
+    const { loadConfig } = await import('../src/config/env.js');
+    assert.throws(() => loadConfig({ NODE_ENV: 'production' }), /OPEN_ACCESS/);
+    assert.equal(loadConfig({ NODE_ENV: 'production', OPEN_ACCESS: 'true' }).openAccess, true);
   });
 });

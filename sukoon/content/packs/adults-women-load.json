@@ -1,0 +1,150 @@
+{
+  "id": "adults-women-load",
+  "version": "0.1.0",
+  "track": "adults",
+  "audience": [
+    "women"
+  ],
+  "title": "Women's Pack: Load and Support",
+  "summary": "The mental load of caregiving, time for self, pressure from expectations, and feeling valued. Written for conversations with adult women.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "kroenke-2001-phq9",
+    "spitzer-2006-gad7",
+    "naccho-aces"
+  ],
+  "clinicianNotes": "Many women describe these pressures, but individuals differ. Avoid assuming; let the client say what applies. Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "load",
+      "label": "Mental load and caregiving",
+      "description": "Carrying most of the planning and care.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On mental load and caregiving, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On mental load and caregiving, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore what could be shared, simplified or dropped.",
+        "explore": "On mental load and caregiving, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore what could be shared, simplified or dropped."
+      }
+    },
+    {
+      "id": "selftime",
+      "label": "Time for myself",
+      "description": "Protected time and permission to do things for self.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On time for myself, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On time for myself, support is partly in place. Explore what helps and what gets in the way. Explore one slot of time that could be protected each week.",
+        "explore": "On time for myself, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore one slot of time that could be protected each week."
+      }
+    },
+    {
+      "id": "expect",
+      "label": "Pressure and expectations",
+      "description": "Feeling judged or expected to be perfect.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On pressure and expectations, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On pressure and expectations, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore whose voices set these expectations and how they affect wellbeing.",
+        "explore": "On pressure and expectations, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore whose voices set these expectations and how they affect wellbeing."
+      }
+    },
+    {
+      "id": "valued",
+      "label": "Feeling valued",
+      "description": "Being noticed, respected and heard.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On feeling valued, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On feeling valued, support is partly in place. Explore what helps and what gets in the way. Explore where the person feels respected and where not.",
+        "explore": "On feeling valued, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore where the person feels respected and where not."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "loa1",
+      "domain": "load",
+      "text": "I carry most of the planning and remembering for the household."
+    },
+    {
+      "id": "loa2",
+      "domain": "load",
+      "text": "I put everyone else's needs ahead of mine."
+    },
+    {
+      "id": "loa3",
+      "domain": "load",
+      "text": "I feel guilty when I rest."
+    },
+    {
+      "id": "sel1",
+      "domain": "selftime",
+      "text": "I get time each week that is only mine."
+    },
+    {
+      "id": "sel2",
+      "domain": "selftime",
+      "text": "I can ask others to take over without feeling bad."
+    },
+    {
+      "id": "sel3",
+      "domain": "selftime",
+      "text": "I do things I enjoy that are not for anyone else."
+    },
+    {
+      "id": "exp1",
+      "domain": "expect",
+      "text": "I feel judged on how I look, my home or how I raise children."
+    },
+    {
+      "id": "exp2",
+      "domain": "expect",
+      "text": "I feel I must be perfect at everything."
+    },
+    {
+      "id": "exp3",
+      "domain": "expect",
+      "text": "Comments from family or community about my choices stay with me."
+    },
+    {
+      "id": "val1",
+      "domain": "valued",
+      "text": "The people around me notice and thank me for what I do."
+    },
+    {
+      "id": "val2",
+      "domain": "valued",
+      "text": "My opinion counts in decisions that affect me."
+    },
+    {
+      "id": "val3",
+      "domain": "valued",
+      "text": "I feel respected at home and in my community."
+    }
+  ]
+}
