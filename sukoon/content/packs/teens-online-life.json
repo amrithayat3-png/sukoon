@@ -1,0 +1,116 @@
+{
+  "id": "teens-online-life",
+  "version": "0.1.0",
+  "track": "teens",
+  "audience": [
+    "general"
+  ],
+  "title": "Online Life: Choose What Happens Next",
+  "summary": "Three situations about a group chat, late-night scrolling and a stranger who asks for a photo. The teen chooses, sees what might happen, and the psychologist leads the discussion.",
+  "status": "draft",
+  "estimatedMinutes": 8,
+  "references": [
+    "samhsa-2014-tic",
+    "goodman-1997-sdq"
+  ],
+  "clinicianNotes": "Original scenarios and conversation starters. The third scenario touches on online grooming: follow child-protection and disclosure procedures if the teen reveals a real situation. Draft content: needs review by a licensed psychologist and a cultural fit check before use with patients.",
+  "format": "scenario",
+  "scenarios": [
+    {
+      "id": "group-chat",
+      "skill": "Standing up online",
+      "title": "The group chat",
+      "setting": "Evening, class group chat",
+      "story": "Someone shares an embarrassing photo of a classmate in the class group chat and people are laughing. Everyone is waiting to see what you will do.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Do not join in, message the classmate privately to check on them, and tell a trusted adult if it continues.",
+          "outcome": "The laughing slows down. The classmate thanks you quietly and feels less alone.",
+          "points": 2,
+          "note": "Protects the person and uses adult support. Explore what made it possible and what could make it hard."
+        },
+        {
+          "id": "b",
+          "text": "Stay quiet and just watch.",
+          "outcome": "Nothing changes in the chat, and you feel uneasy about it later.",
+          "points": 1,
+          "note": "Silence is common when the group is loud. Explore the fear of becoming the next target."
+        },
+        {
+          "id": "c",
+          "text": "Add a laughing reaction like everyone else.",
+          "outcome": "The chat gets louder, and you feel bad when you picture being in that photo.",
+          "points": 0,
+          "note": "Joining in often protects belonging. Explore what the teen needed in that moment."
+        }
+      ],
+      "keyMessage": "You can stand up for someone without a big scene. A private message and a trusted adult both help.",
+      "discussion": "What is one thing you could do next time a group laughs at someone?"
+    },
+    {
+      "id": "late-scroll",
+      "skill": "Balancing screen time",
+      "title": "One more video",
+      "setting": "Midnight, bedroom",
+      "story": "It is midnight and you have school tomorrow. The next video starts playing and you feel your eyes getting heavy, but you want to keep going.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Put the phone on charge across the room and tell yourself you can watch more tomorrow.",
+          "outcome": "It is hard for a minute, then you fall asleep and wake up less tired.",
+          "points": 2,
+          "note": "Uses a simple environmental trick. Explore what helps the teen stick to it."
+        },
+        {
+          "id": "b",
+          "text": "Watch ten more minutes, then ten more, then fall asleep late.",
+          "outcome": "You get through tomorrow, but you feel foggy and short-tempered.",
+          "points": 1,
+          "note": "The pull of autoplay is designed to be strong. Explore what the teen is escaping or enjoying."
+        },
+        {
+          "id": "c",
+          "text": "Keep scrolling until very late and worry about tomorrow when it comes.",
+          "outcome": "You are exhausted at school and slip behind on homework.",
+          "points": 0,
+          "note": "Look for stress or loneliness behind long late-night use. Explore what the teen finds at night that they miss by day."
+        }
+      ],
+      "keyMessage": "Rest powers mood, memory and friendships. Small tricks beat willpower alone.",
+      "discussion": "Where could your phone sleep tonight so it is easier to rest?"
+    },
+    {
+      "id": "stranger-message",
+      "skill": "Staying safe online",
+      "title": "The friendly stranger",
+      "setting": "Evening, private messages",
+      "story": "Someone you only know online keeps messaging you privately. They praise you a lot, ask you to send a photo, and tell you to keep the chat a secret.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Send nothing, stop replying, block them, and tell a parent or teacher.",
+          "outcome": "You feel nervous, but the adult helps you report the account and you feel safer.",
+          "points": 2,
+          "note": "Clear safe response. Explore any discomfort about telling an adult and reinforce that the teen did nothing wrong."
+        },
+        {
+          "id": "b",
+          "text": "Reply politely without sending a photo, and keep it to yourself.",
+          "outcome": "The messages continue and you feel uneasy but unsure what to do.",
+          "points": 1,
+          "note": "Partial protection. Explore secrecy, flattery and why telling feels hard."
+        },
+        {
+          "id": "c",
+          "text": "Send the photo because they seem friendly and promised to keep it secret.",
+          "outcome": "Soon they ask for more and threaten to share it, and you feel trapped.",
+          "points": 0,
+          "note": "Follow child-protection procedures if this reflects a real situation. Respond without blame and explore who the teen can tell."
+        }
+      ],
+      "keyMessage": "Anyone who asks you to keep a secret about private photos is not a safe friend. Telling a trusted adult is always right.",
+      "discussion": "Who are two adults you would feel able to tell if something online made you uncomfortable?"
+    }
+  ]
+}

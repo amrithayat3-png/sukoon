@@ -115,6 +115,7 @@ details.card summary{cursor:pointer;font-weight:800}
 .outcome.picked{border-color:var(--accent);background:var(--accent-soft)}
 .center{text-align:center}
 .pin{letter-spacing:.6em;text-align:center;font-size:1.6rem;max-width:12ch;margin:0 auto}
+.senior .patient{font-size:1.2rem}.senior .q{font-size:clamp(1.6rem,4vw,2.1rem)}.senior .choice{min-height:68px}
 .celebrate{width:180px;height:auto;margin:0 auto}
 /* Results */
 .bar{height:16px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0}

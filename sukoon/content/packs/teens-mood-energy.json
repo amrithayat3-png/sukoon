@@ -1,0 +1,157 @@
+{
+  "id": "teens-mood-energy",
+  "version": "0.1.0",
+  "track": "teens",
+  "audience": [
+    "general"
+  ],
+  "title": "Mood and Energy",
+  "summary": "Low mood, tiredness and focus, how a teen sees themselves, and what still brings joy. Includes one safety question.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "goodman-1997-sdq",
+    "samhsa-2014-tic",
+    "sdq-urdu-karachi"
+  ],
+  "clinicianNotes": "Contains a safety item that raises a clinician flag. Agree your response protocol, including involving guardians, before use. Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "mood",
+      "label": "Low mood",
+      "description": "Feeling sad, empty or easily upset.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On low mood, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On low mood, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask how long this has lasted and what changed around then.",
+        "explore": "On low mood, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask how long this has lasted and what changed around then."
+      }
+    },
+    {
+      "id": "energy",
+      "label": "Energy and focus",
+      "description": "Tiredness and trouble concentrating.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On energy and focus, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On energy and focus, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore sleep, food, screens and school load.",
+        "explore": "On energy and focus, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore sleep, food, screens and school load."
+      }
+    },
+    {
+      "id": "worth",
+      "label": "Self-worth",
+      "description": "Feeling not good enough or a burden.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On self-worth, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On self-worth, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore the voice of self-criticism and who has said similar things.",
+        "explore": "On self-worth, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore the voice of self-criticism and who has said similar things."
+      }
+    },
+    {
+      "id": "joy",
+      "label": "Joy and hope",
+      "description": "Things still enjoyed and looked forward to.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On joy and hope, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On joy and hope, support is partly in place. Explore what helps and what gets in the way. Explore small activities and people that lift mood.",
+        "explore": "On joy and hope, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore small activities and people that lift mood."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "moo1",
+      "domain": "mood",
+      "text": "I feel sad or empty a lot of the time."
+    },
+    {
+      "id": "moo2",
+      "domain": "mood",
+      "text": "I get upset or cry and I do not know why."
+    },
+    {
+      "id": "moo3",
+      "domain": "mood",
+      "text": "Things I used to enjoy feel boring now."
+    },
+    {
+      "id": "ene1",
+      "domain": "energy",
+      "text": "I feel tired even after sleeping."
+    },
+    {
+      "id": "ene2",
+      "domain": "energy",
+      "text": "It is hard to get out of bed for school."
+    },
+    {
+      "id": "ene3",
+      "domain": "energy",
+      "text": "I find it hard to concentrate in class."
+    },
+    {
+      "id": "wor1",
+      "domain": "worth",
+      "text": "I feel I am not good enough."
+    },
+    {
+      "id": "wor2",
+      "domain": "worth",
+      "text": "I feel like a burden to my family or friends."
+    },
+    {
+      "id": "wor3",
+      "domain": "worth",
+      "text": "I am very hard on myself when I make mistakes."
+    },
+    {
+      "id": "joy1",
+      "domain": "joy",
+      "text": "There are things I still enjoy doing."
+    },
+    {
+      "id": "joy2",
+      "domain": "joy",
+      "text": "I have something to look forward to."
+    },
+    {
+      "id": "joy3",
+      "domain": "joy",
+      "text": "I feel hopeful about my future."
+    },
+    {
+      "id": "mood-safety",
+      "domain": "mood",
+      "text": "I have had thoughts of hurting myself, or that life is not worth living.",
+      "safety": true,
+      "scored": false
+    }
+  ]
+}

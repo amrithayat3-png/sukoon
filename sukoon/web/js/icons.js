@@ -84,6 +84,10 @@ const ICONS = {
   women: () => [s('g', null, ...[0, 72, 144, 216, 288].map((a) => s('ellipse', { cx: 24, cy: 12, rx: 6, ry: 9, fill: '#ff8ab3', transform: `rotate(${a} 24 24)` })), s('circle', { cx: 24, cy: 24, r: 6, fill: '#ffd166' }))],
   stress: () => [s('path', { d: 'M4 28c6-10 10-10 14 0s8 10 14 0 8-8 12-2', stroke: '#0f8b8d', 'stroke-width': 4, fill: 'none', 'stroke-linecap': 'round' }), s('path', { d: 'M4 38c6-10 10-10 14 0s8 10 14 0 8-8 12-2', stroke: '#7ae0b8', 'stroke-width': 4, fill: 'none', 'stroke-linecap': 'round' })],
   everyday: () => [s('path', { d: 'M24 44V8', stroke: '#a9744f', 'stroke-width': 4, 'stroke-linecap': 'round' }), s('path', { d: 'M24 10h14l4 5-4 5H24z', fill: '#ffb703' }), s('path', { d: 'M24 24H10l-4 5 4 5h14z', fill: '#8e7dff' })],
+  book: () => [s('path', { d: 'M6 10c6-3 12-3 18 1v28c-6-4-12-4-18-1z', fill: '#8e7dff' }), s('path', { d: 'M42 10c-6-3-12-3-18 1v28c6-4 12-4 18-1z', fill: '#ffb703' })],
+  phone: () => [s('rect', { x: 13, y: 4, width: 22, height: 40, rx: 6, fill: '#3f86e8' }), s('rect', { x: 16, y: 10, width: 16, height: 26, rx: 2, fill: '#e0edff' }), s('circle', { cx: 24, cy: 40, r: 2, fill: '#fff' })],
+  smile: () => [s('circle', { cx: 24, cy: 24, r: 18, fill: '#ffd166' }), s('circle', { cx: 18, cy: 21, r: 2.5, fill: '#23313a' }), s('circle', { cx: 30, cy: 21, r: 2.5, fill: '#23313a' }), s('path', { d: 'M16 29c4 6 12 6 16 0', stroke: '#23313a', 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' })],
+  bulb: () => [s('path', { d: 'M24 4a14 14 0 00-8 25c2 2 2 4 2 6h12c0-2 0-4 2-6A14 14 0 0024 4z', fill: '#ffd166' }), s('rect', { x: 18, y: 38, width: 12, height: 5, rx: 2.5, fill: '#8a6a4a' })],
   spark: () => [s('path', { d: 'M24 6l5 13 13 5-13 5-5 13-5-13-13-5 13-5z', fill: '#ffb703' })],
 };
 
@@ -94,6 +98,13 @@ const PACK_ICON = {
   'adults-men-pressure': ['men', 'teal'], 'adults-women-load': ['women', 'pink'],
   'adults-stress-wellbeing': ['stress', 'mint'], 'adults-everyday-situations': ['everyday', 'sun'],
   'teens-pressure-and-peers': ['teens', 'lavender'],
+  'teens-exam-stress': ['book', 'lavender'], 'teens-mood-energy': ['mood', 'sky'],
+  'teens-friends-belonging': ['relationships', 'coral'], 'teens-screens-online': ['phone', 'sky'],
+  'teens-body-confidence': ['smile', 'sun'], 'teens-online-life': ['phone', 'teal'],
+  'teens-friendship-situations': ['teens', 'pink'],
+  'seniors-loneliness': ['lonely', 'mint'], 'seniors-sleep-body': ['sleep', 'lavender'],
+  'seniors-mood': ['mood', 'sky'], 'seniors-loss-change': ['seniors', 'pink'],
+  'seniors-memory-worries': ['bulb', 'sun'], 'seniors-everyday-situations': ['everyday', 'teal'],
 };
 const TRACK_ICON = { kids: ['kids', 'coral'], teens: ['teens', 'lavender'], adults: ['adults', 'teal'], seniors: ['seniors', 'sun'] };
 

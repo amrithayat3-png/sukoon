@@ -1,0 +1,150 @@
+{
+  "id": "seniors-sleep-body",
+  "version": "0.1.0",
+  "track": "seniors",
+  "audience": [
+    "general"
+  ],
+  "title": "Sleep, Pain and Energy",
+  "summary": "Sleep, aches and health worries, energy, and daily routine. Written in plain language for older adults.",
+  "status": "draft",
+  "estimatedMinutes": 6,
+  "references": [
+    "kroenke-2001-phq9",
+    "spitzer-2006-gad7",
+    "naccho-aces"
+  ],
+  "clinicianNotes": "Persistent sleep, pain or energy problems need medical review alongside psychological support. Written for adults aged 60 and over. Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "sleep",
+      "label": "Sleep",
+      "description": "Trouble falling or staying asleep.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On sleep, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On sleep, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask about medicines, pain, worries and day naps.",
+        "explore": "On sleep, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask about medicines, pain, worries and day naps."
+      }
+    },
+    {
+      "id": "pain",
+      "label": "Pain and health worries",
+      "description": "Aches that interfere and worry about health.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On pain and health worries, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On pain and health worries, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore medical follow-up and worries about being a burden.",
+        "explore": "On pain and health worries, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore medical follow-up and worries about being a burden."
+      }
+    },
+    {
+      "id": "energy",
+      "label": "Energy",
+      "description": "Weakness and effort needed for everyday tasks.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On energy, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On energy, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore activities given up and what support would help.",
+        "explore": "On energy, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore activities given up and what support would help."
+      }
+    },
+    {
+      "id": "routine",
+      "label": "Daily routine",
+      "description": "Regular routine, gentle movement and feeling rested.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On daily routine, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On daily routine, support is partly in place. Explore what helps and what gets in the way. Build on routines that already work.",
+        "explore": "On daily routine, support looks thin. Explore what is missing, who or what could help, and small first steps. Build on routines that already work."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "sle1",
+      "domain": "sleep",
+      "text": "I find it hard to fall asleep or I wake often."
+    },
+    {
+      "id": "sle2",
+      "domain": "sleep",
+      "text": "I wake very early and cannot go back to sleep."
+    },
+    {
+      "id": "sle3",
+      "domain": "sleep",
+      "text": "I nap a lot in the day because my night is poor."
+    },
+    {
+      "id": "pai1",
+      "domain": "pain",
+      "text": "Aches or pain get in the way of my day."
+    },
+    {
+      "id": "pai2",
+      "domain": "pain",
+      "text": "I worry a lot about my health."
+    },
+    {
+      "id": "pai3",
+      "domain": "pain",
+      "text": "I worry about becoming a burden because of my health."
+    },
+    {
+      "id": "ene1",
+      "domain": "energy",
+      "text": "I feel weak or tired most days."
+    },
+    {
+      "id": "ene2",
+      "domain": "energy",
+      "text": "Everyday tasks take much more effort than before."
+    },
+    {
+      "id": "ene3",
+      "domain": "energy",
+      "text": "I have stopped some activities because I get tired."
+    },
+    {
+      "id": "rou1",
+      "domain": "routine",
+      "text": "I have a regular daily routine."
+    },
+    {
+      "id": "rou2",
+      "domain": "routine",
+      "text": "I get some gentle movement or fresh air most days."
+    },
+    {
+      "id": "rou3",
+      "domain": "routine",
+      "text": "I feel rested on most mornings."
+    }
+  ]
+}

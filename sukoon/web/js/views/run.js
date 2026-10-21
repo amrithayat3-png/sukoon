@@ -64,7 +64,7 @@ export async function runView(root, sessionId) {
               h('strong', null, o.id === picked ? 'You chose: ' : 'Another choice: '), o.text, h('p', { class: 'small' }, o.outcome)))) : null,
         ];
       }
-      root.className = tone;
+      root.className = `${tone}${detail.summary.track === 'seniors' ? ' senior' : ''}`;
       mount(root, h('div', { class: 'patient' },
         h('div', { class: 'runhead' }, packIcon(session.packId), h('div', null, h('strong', null, view.title), h('div', { class: 'small muted' }, `${index + 1} of ${steps.length}`))),
         h('div', { class: 'progress', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': pct }, h('span', { style: { width: `${pct}%` } })),
