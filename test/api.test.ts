@@ -59,8 +59,10 @@ describe('catalog', () => {
     assert.equal(tracks.length, 4);
     assert.equal(tracks.find((t) => t['id'] === 'adults')?.['packCount'], 10);
     assert.equal(tracks.find((t) => t['id'] === 'kids')?.['packCount'], 0);
+    assert.equal(tracks.find((t) => t['id'] === 'teens')?.['packCount'], 8);
+    assert.equal(tracks.find((t) => t['id'] === 'seniors')?.['packCount'], 6);
     const packs = asJson((await h.call('GET', '/api/v1/tracks/teens/packs')).body)['packs'] as Json[];
-    assert.equal(packs[0]?.['id'], 'teens-pressure-and-peers');
+    assert.ok(packs.some((p) => p['id'] === 'teens-pressure-and-peers'));
     assert.equal((await h.call('GET', '/api/v1/tracks/nope/packs')).status, 404);
   });
 
@@ -188,5 +190,35 @@ describe('open access mode', () => {
     const { loadConfig } = await import('../src/config/env.js');
     assert.throws(() => loadConfig({ NODE_ENV: 'production' }), /OPEN_ACCESS/);
     assert.equal(loadConfig({ NODE_ENV: 'production', OPEN_ACCESS: 'true' }).openAccess, true);
+  });
+});
+
+describe('every shipped pack', () => {
+  it('can be completed and scored end to end', async () => {
+    const tracks = (asJson((await h.call('GET', '/api/v1/tracks')).body)['tracks'] as Json[]).map((t) => String(t['id']));
+    let total = 0;
+    for (const track of tracks) {
+      const packs = asJson((await h.call('GET', `/api/v1/tracks/${track}/packs`)).body)['packs'] as Json[];
+      for (const pack of packs) {
+        const id = String(pack['id']);
+        const detail = asJson((await h.call('GET', `/api/v1/packs/${id}`)).body);
+        const view = asJson(detail['patientView']);
+        const responses: Json = {};
+        if (view['format'] === 'checkin') {
+          for (const item of view['items'] as Json[]) responses[String(item['id'])] = 1;
+        } else {
+          for (const sc of view['scenarios'] as Json[]) responses[String(sc['id'])] = String(((sc['options'] as Json[])[0] as Json)['id']);
+        }
+        const created = asJson((await h.call('POST', '/api/v1/sessions', { body: { packId: id } })).body);
+        const sid = String(created['id']);
+        assert.equal((await h.call('PUT', `/api/v1/sessions/${sid}/responses`, { body: { responses } })).status, 200, id);
+        assert.equal((await h.call('POST', `/api/v1/sessions/${sid}/complete`)).status, 200, id);
+        const res = await h.call('GET', `/api/v1/sessions/${sid}/results`);
+        assert.equal(res.status, 200, id);
+        assert.ok(((asJson(asJson(res.body)['results'])['domains']) as unknown[]).length > 0, id);
+        total += 1;
+      }
+    }
+    assert.equal(total, 24);
   });
 });

@@ -1,0 +1,150 @@
+{
+  "id": "teens-friends-belonging",
+  "version": "0.1.0",
+  "track": "teens",
+  "audience": [
+    "general"
+  ],
+  "title": "Friends and Belonging",
+  "summary": "Loneliness, friend problems and peer pressure, feeling safe at school, and sense of belonging.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "goodman-1997-sdq",
+    "samhsa-2014-tic",
+    "sdq-urdu-karachi"
+  ],
+  "clinicianNotes": "Ask about bullying directly if feeling safe is low, and follow school and child-protection procedures. Topic areas are informed by general published work on stress, mood and wellbeing. All items are original wording and are not copied or adapted from any instrument. Bands are provisional and not clinically validated. Use the summary to guide your own questions. Draft content: needs review by a licensed psychologist, and a topic-specific reference list should be added during that review.",
+  "format": "checkin",
+  "prompt": "Thinking about the last two weeks, how true is this for you?",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Not true at all"
+    },
+    {
+      "value": 1,
+      "label": "A little true"
+    },
+    {
+      "value": 2,
+      "label": "Quite true"
+    },
+    {
+      "value": 3,
+      "label": "Very true"
+    }
+  ],
+  "bands": {
+    "watchFrom": 40,
+    "exploreFrom": 65
+  },
+  "domains": [
+    {
+      "id": "lonely",
+      "label": "Feeling lonely",
+      "description": "Loneliness and feeling left out.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On feeling lonely, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On feeling lonely, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Ask when it feels strongest and what kind of company is missing.",
+        "explore": "On feeling lonely, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Ask when it feels strongest and what kind of company is missing."
+      }
+    },
+    {
+      "id": "friendtrouble",
+      "label": "Friend problems",
+      "description": "Falling outs, unkindness and going along to fit in.",
+      "polarity": "risk",
+      "guidance": {
+        "ok": "On friend problems, things look manageable. Ask what helps, and whether anything has changed recently.",
+        "watch": "On friend problems, some strain is showing. Explore when it began, what triggers it, and what the person already does about it. Explore the situations that hurt most and what the teen wishes they could say.",
+        "explore": "On friend problems, the person is strongly affected. Explore how long this has lasted, how it affects daily life, and whether a structured assessment is warranted. Explore the situations that hurt most and what the teen wishes they could say."
+      }
+    },
+    {
+      "id": "safe",
+      "label": "Feeling safe",
+      "description": "Feeling safe at school and knowing who to tell.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On feeling safe, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On feeling safe, support is partly in place. Explore what helps and what gets in the way. If safety is thin, explore specific incidents and follow your protocol.",
+        "explore": "On feeling safe, support looks thin. Explore what is missing, who or what could help, and small first steps. If safety is thin, explore specific incidents and follow your protocol."
+      }
+    },
+    {
+      "id": "belong",
+      "label": "Belonging",
+      "description": "Having a place and at least one good friend.",
+      "polarity": "protective",
+      "guidance": {
+        "ok": "On belonging, there is a strength to build on. Use it when planning next steps.",
+        "watch": "On belonging, support is partly in place. Explore what helps and what gets in the way. Explore groups and friendships that could be grown.",
+        "explore": "On belonging, support looks thin. Explore what is missing, who or what could help, and small first steps. Explore groups and friendships that could be grown."
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "lon1",
+      "domain": "lonely",
+      "text": "I feel lonely even when I am with other people."
+    },
+    {
+      "id": "lon2",
+      "domain": "lonely",
+      "text": "I feel left out of my group."
+    },
+    {
+      "id": "lon3",
+      "domain": "lonely",
+      "text": "I do not have anyone I can really talk to."
+    },
+    {
+      "id": "fri1",
+      "domain": "friendtrouble",
+      "text": "I have fallen out with friends and it still bothers me."
+    },
+    {
+      "id": "fri2",
+      "domain": "friendtrouble",
+      "text": "Friends have spread things about me or teased me in ways that hurt."
+    },
+    {
+      "id": "fri3",
+      "domain": "friendtrouble",
+      "text": "I go along with things I do not want to do so friends will like me."
+    },
+    {
+      "id": "saf1",
+      "domain": "safe",
+      "text": "I feel safe at school and on the way there."
+    },
+    {
+      "id": "saf2",
+      "domain": "safe",
+      "text": "If someone bothered me, I know who to tell."
+    },
+    {
+      "id": "saf3",
+      "domain": "safe",
+      "text": "Most of the people around me treat me kindly."
+    },
+    {
+      "id": "bel1",
+      "domain": "belong",
+      "text": "I feel I belong in at least one group."
+    },
+    {
+      "id": "bel2",
+      "domain": "belong",
+      "text": "I have at least one good friend."
+    },
+    {
+      "id": "bel3",
+      "domain": "belong",
+      "text": "I can be myself around my friends."
+    }
+  ]
+}
