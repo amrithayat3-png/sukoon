@@ -2,6 +2,7 @@ import { api } from '../api.js';
 import { state } from '../state.js';
 import { h, mount, link, errorBox, pageTitle } from '../ui.js';
 import { packIcon, packTone } from '../icons.js';
+import { weatherPicker, worldArt } from '../worlds.js';
 
 export async function packView(root, packId) {
   try {
@@ -39,16 +40,18 @@ export async function packView(root, packId) {
       slot, h('div', null, start));
     mount(root,
       h('div', { class: 'crumbs' }, link('#/', 'Home'), ' / ', link(`#/track/${s.track}`, s.track), ' / ', s.title),
-      h('div', { class: `banner ${tone}` },
-        packIcon(packId, true),
+      h('div', { class: `banner world ${tone}` },
+        worldArt(s.track),
+        h('div', { class: 'banner-text' }, packIcon(packId, true),
         h('div', null,
           h('h1', { style: { margin: 0 } }, s.title),
           h('div', { class: 'row' },
             h('span', { class: 'chip' }, s.format === 'checkin' ? 'Questions' : 'Story choices'),
             h('span', { class: 'chip' }, `About ${s.estimatedMinutes} min`),
-            h('span', { class: 'chip' }, `${s.itemCount} ${s.format === 'checkin' ? 'questions' : 'stories'}`)))),
+            h('span', { class: 'chip' }, `${s.itemCount} ${s.format === 'checkin' ? 'questions' : 'stories'}`))))),
       h('p', { style: { fontSize: '1.08rem' } }, s.summary),
       h('div', { class: 'stack' },
+        weatherPicker(state),
         form,
         h('details', { class: 'card' },
           h('summary', null, 'About this activity'),

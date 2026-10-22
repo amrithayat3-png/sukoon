@@ -1,0 +1,119 @@
+import { h } from './ui.js';
+import { s } from './icons.js';
+
+const sv = (cls, vb, ...kids) => s('svg', { viewBox: vb, class: cls, 'aria-hidden': 'true', focusable: 'false', preserveAspectRatio: 'xMidYMax slice' }, ...kids);
+const grad = (id, a, b) => s('linearGradient', { id, x1: 0, y1: 0, x2: 0, y2: 1 }, s('stop', { offset: '0', 'stop-color': a }), s('stop', { offset: '1', 'stop-color': b }));
+const rect = (x, y, w, hh, fill, rx = 0) => s('rect', { x, y, width: w, height: hh, fill, rx });
+const circ = (cx, cy, r, fill) => s('circle', { cx, cy, r, fill });
+
+function flower(x, y, c, n) {
+  return s('g', { class: `sway-s d${n}` },
+    s('path', { d: `M${x} ${y + 26}V${y}`, stroke: '#3c9d6b', 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' }),
+    circ(x, y - 4, 7, c), circ(x - 7, y, 6, c), circ(x + 7, y, 6, c), circ(x, y + 5, 6, c), circ(x, y, 5, '#ffe08a'));
+}
+
+const SCENES = {
+  kids: () => [
+    s('defs', null, grad('wk', '#d7f1ff', '#fff5d6')),
+    rect(0, 0, 400, 140, 'url(#wk)'),
+    circ(330, 36, 20, '#ffcf4d'), s('g', { class: 'drift' }, s('ellipse', { cx: 90, cy: 34, rx: 34, ry: 12, fill: '#fff' }), s('ellipse', { cx: 112, cy: 28, rx: 22, ry: 11, fill: '#fff' })),
+    s('path', { d: 'M0 100q80-34 170-8t230-10V140H0z', fill: '#8fdc9b' }),
+    s('path', { d: 'M0 120q110-30 220-4t180-6V140H0z', fill: '#5fc27a' }),
+    flower(50, 98, '#ff8ab3', 0), flower(130, 108, '#ffffff', 1), flower(230, 100, '#ffb703', 2), flower(320, 106, '#a592ff', 3),
+    s('g', { class: 'fly' }, s('path', { d: 'M265 58q8-12 16 0q-8 6-16 0zM281 58q8-12 16 0q-8 6-16 0z', fill: '#ff8ab3' })),
+  ],
+  teens: () => [
+    s('defs', null, grad('wt', '#6a5be2', '#ffb27a')),
+    rect(0, 0, 400, 140, 'url(#wt)'),
+    circ(320, 34, 15, '#fff6d9'), circ(326, 31, 13, '#8b7ce6'),
+    ...[[40, 20], [120, 12], [200, 26], [260, 10], [370, 18]].map(([x, y]) => circ(x, y, 1.6, '#fff')),
+    ...[[0, 80, 40], [44, 62, 36], [84, 90, 44], [132, 70, 34], [170, 54, 40], [214, 84, 38], [256, 66, 42], [302, 92, 36], [342, 72, 58]].map(([x, y, w]) => rect(x, y, w, 140 - y, '#33306e')),
+    ...[[8, 92], [20, 104], [52, 74], [60, 90], [96, 104], [140, 84], [178, 68], [186, 84], [222, 98], [264, 80], [276, 96], [352, 86], [372, 100]].map(([x, y]) => rect(x, y, 5, 6, '#ffd166', 1)),
+  ],
+  adults: () => [
+    s('defs', null, grad('wa', '#cfeeea', '#fff1d6')),
+    rect(0, 0, 400, 140, 'url(#wa)'),
+    circ(70, 52, 22, '#ffc857'),
+    s('path', { d: 'M0 92q90-40 190-6t210-18V140H0z', fill: '#9bd7c4' }),
+    s('path', { d: 'M0 112q120-34 240-2t160-10V140H0z', fill: '#4fb59a' }),
+    s('path', { d: 'M150 140q40-10 20-28t60-22 70-20', stroke: '#fff1d6', 'stroke-width': 10, fill: 'none', 'stroke-linecap': 'round' }),
+    ...[[300, 66], [340, 74], [26, 86]].map(([x, y]) => s('g', null, rect(x - 2, y + 10, 4, 18, '#8a6a4a'), circ(x, y, 14, '#2f9477'))),
+    s('g', { class: 'fly' }, s('path', { d: 'M200 40q6-8 12 0M214 36q6-8 12 0', stroke: '#2a6f63', 'stroke-width': 2, fill: 'none', 'stroke-linecap': 'round' })),
+  ],
+  seniors: () => [
+    s('defs', null, grad('ws', '#ffd9a8', '#fff3de')),
+    rect(0, 0, 400, 140, 'url(#ws)'),
+    s('path', { d: 'M120 112a80 80 0 0 1 160 0z', fill: '#ffb347', class: 'rise' }),
+    rect(0, 108, 400, 32, '#f3c88d'),
+    ...Array.from({ length: 9 }, (_, i) => rect(14 + i * 46, 88, 8, 52, '#a7714b', 3)),
+    rect(0, 84, 400, 8, '#8a5a38', 3),
+    s('g', null, s('path', { d: 'M340 84h30l-4 22h-22z', fill: '#d9774b' }), s('path', { d: 'M355 84q-14-24 4-34q4 18-4 34zM355 84q16-20 2-38q-10 20-2 38z', fill: '#4fa070' })),
+    s('g', { class: 'bob' }, circ(60, 54, 3, '#fff'), circ(74, 48, 2, '#fff')),
+  ],
+};
+
+export function worldArt(trackId, cls = 'world-art') {
+  return sv(cls, '0 0 400 140', ...(SCENES[trackId] ?? SCENES.adults)());
+}
+
+export const WORLD_NAME = { kids: 'the garden', teens: 'the city at dusk', adults: 'the winding path', seniors: 'the sunrise porch' };
+
+/** Breathing circle: a calm 30 second guided moment. All text, no data leaves the device. */
+export function breathCard() {
+  const label = h('div', { class: 'breath-label', 'aria-live': 'polite' }, 'Tap to begin');
+  const sub = h('div', { class: 'small muted' }, 'A 30 second breathing moment, just for you.');
+  const circle = h('button', { class: 'breath-circle', type: 'button', 'aria-label': 'Start a 30 second breathing moment' }, h('span', { class: 'breath-core' }), label);
+  let timer = null;
+  const stop = (msg) => { clearInterval(timer); timer = null; circle.classList.remove('on'); label.textContent = msg; };
+  circle.addEventListener('click', () => {
+    if (timer) { stop('Tap to begin'); return; }
+    let t = 0;
+    circle.classList.add('on');
+    const tick = () => {
+      if (!circle.isConnected) { stop(''); return; }
+      if (t >= 30) { stop('Well done'); return; }
+      label.textContent = Math.floor(t / 4) % 2 === 0 ? 'Breathe in' : 'Breathe out';
+      t += 1;
+    };
+    tick();
+    timer = setInterval(tick, 1000);
+  });
+  return h('section', { class: 'card breath' }, h('div', { class: 'breath-wrap' }, circle,
+    h('div', null, h('h2', null, 'Take a calm moment'), h('p', { class: 'muted' }, 'Breathe in as the circle grows, out as it softens. Good to do together before an activity.'), sub)));
+}
+
+const WEATHER = [
+  ['sunny', 'Sunny', 'Bright and light. Lovely.'],
+  ['partly', 'A bit cloudy', 'Some clouds are okay. We can look at them together.'],
+  ['rainy', 'Rainy', 'Rainy days count too. You are in the right place.'],
+  ['stormy', 'Stormy', 'Thank you for showing it. We will go gently.'],
+  ['rainbow', 'Rainbow', 'Mixed and hopeful. That is real too.'],
+];
+
+function weatherGlyph(kind) {
+  const cloud = (fill = '#c9d6e3') => s('path', { d: 'M18 40a9 9 0 0 1 1-18 12 12 0 0 1 23 3 8 8 0 0 1-1 15z', fill });
+  const g = {
+    sunny: [circ(32, 32, 11, '#ffb703'), ...[0, 45, 90, 135, 180, 225, 270, 315].map((a) => s('rect', { x: 30.5, y: 6, width: 3, height: 8, rx: 1.5, fill: '#ffb703', transform: `rotate(${a} 32 32)` }))],
+    partly: [circ(24, 24, 9, '#ffb703'), cloud('#dbe6f1')],
+    rainy: [cloud('#a9bcd0'), ...[[22, 46], [32, 50], [42, 46]].map(([x, y]) => s('path', { d: `M${x} ${y}l-3 8`, stroke: '#4f86e8', 'stroke-width': 3, 'stroke-linecap': 'round' }))],
+    stormy: [cloud('#7d8fa6'), s('path', { d: 'M34 40l-7 10h6l-3 9 10-13h-6l3-6z', fill: '#ffc83d' })],
+    rainbow: [...['#ff6b6b', '#ffb703', '#52c3a3', '#6fa8ff'].map((c, i) => s('path', { d: `M${8 + i * 5} 46a${24 - i * 5} ${24 - i * 5} 0 0 1 ${48 - i * 10} 0`, stroke: c, 'stroke-width': 4, fill: 'none', 'stroke-linecap': 'round' }))],
+  }[kind];
+  return s('svg', { viewBox: '0 0 64 64', class: 'wglyph', 'aria-hidden': 'true', focusable: 'false' }, ...g);
+}
+
+/** Optional warm-up before an activity. Kept on the device only, never sent to the server. */
+export function weatherPicker(state) {
+  const reply = h('p', { class: 'weather-reply', 'aria-live': 'polite' }, state.mood ? WEATHER.find((w) => w[0] === state.mood)?.[2] : 'Tap one. There is no wrong answer.');
+  const buttons = WEATHER.map(([id, name, text]) => {
+    const b = h('button', { class: 'weather', type: 'button', 'aria-pressed': String(state.mood === id), onClick: () => {
+      state.mood = state.mood === id ? null : id;
+      for (const x of buttons) x.setAttribute('aria-pressed', String(x.dataset.id === state.mood));
+      reply.textContent = state.mood ? text : 'Tap one. There is no wrong answer.';
+    } }, weatherGlyph(id), h('span', null, name));
+    b.dataset.id = id;
+    return b;
+  });
+  return h('section', { class: 'card' }, h('h2', null, 'What is the weather like inside today?'), h('div', { class: 'weather-row', role: 'group', 'aria-label': 'Inner weather' }, buttons), reply,
+    h('p', { class: 'small muted' }, 'This stays on this screen. It is not saved or sent anywhere.'));
+}

@@ -2,6 +2,7 @@ import { api } from '../api.js';
 import { state } from '../state.js';
 import { h, mount, errorBox, pageTitle } from '../ui.js';
 import { packIcon, packTone } from '../icons.js';
+import { worldArt } from '../worlds.js';
 
 export async function runView(root, sessionId) {
   try {
@@ -12,7 +13,7 @@ export async function runView(root, sessionId) {
     pageTitle(detail.patientView.title);
     const view = detail.patientView;
     const tone = `tone-${packTone(session.packId)}`;
-    const cheerFor = (i, n) => (i === 0 ? 'Take your time. There are no right or wrong answers.' : i === n - 1 ? 'Last one. You are doing great!' : i === Math.floor(n / 2) ? 'Halfway there. Well done!' : '');
+    const cheerFor = (i, n) => (i === 0 ? (state.mood === 'stormy' || state.mood === 'rainy' ? 'Thank you for being here. We will go gently, one step at a time.' : 'Take your time. There are no right or wrong answers.') : i === n - 1 ? 'Last one. You are doing great!' : i === Math.floor(n / 2) ? 'Halfway there. Well done!' : '');
     const steps = view.format === 'checkin' ? view.items : view.scenarios;
     // Answers already saved on the server (after a refresh) come back with the session.
     const answers = { ...(session.responses || {}) };
@@ -93,6 +94,7 @@ export async function runView(root, sessionId) {
       }
       root.className = `${tone}${detail.summary.track === 'seniors' ? ' senior' : ''}`;
       mount(root, h('div', { class: 'patient' },
+        h('div', { class: 'strip' }, worldArt(detail.summary.track, 'world-art')),
         h('div', { class: 'runhead' }, packIcon(session.packId), h('div', null, h('strong', null, view.title), h('div', { class: 'small muted' }, `${index + 1} of ${steps.length}`))),
         h('div', { class: 'progress', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': pct }, h('span', { style: { width: `${pct}%` } })),
         h('div', { class: 'cheer', 'aria-live': 'polite' }, cheerFor(index, steps.length)),

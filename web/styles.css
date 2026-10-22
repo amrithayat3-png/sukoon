@@ -133,3 +133,27 @@ body.patient-mode .topnav{display:none}
   body{background:#fff;color:#000}.card{box-shadow:none;break-inside:avoid}.print-only{display:block;font-size:.8rem;margin-top:16px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* v5 redesign: softer shapes, scenes, breathing circle, inner weather */
+.card{border-radius:24px}
+.banner.world{position:relative;overflow:hidden;min-height:150px;padding:0;border:0;background:var(--accent-soft)}
+.banner.world .world-art{position:absolute;inset:0;width:100%;height:100%}
+.banner-text{position:relative;display:flex;gap:16px;align-items:center;margin:18px;padding:16px 20px;border-radius:20px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(6px);max-width:min(560px,calc(100% - 36px))}
+.strip{height:84px;border-radius:22px;overflow:hidden;margin-bottom:14px}.strip .world-art{width:100%;height:100%;display:block}
+.sway-s{transform-box:fill-box;transform-origin:50% 100%;animation:sway 4.5s ease-in-out infinite alternate}
+.sway-s.d1{animation-delay:-1s}.sway-s.d2{animation-delay:-2s}.sway-s.d3{animation-delay:-3s}
+.rise{animation:bob 6s ease-in-out infinite alternate}
+.breath{margin:6px 0 26px;background:linear-gradient(135deg,var(--brand-soft),var(--surface))}
+.breath-wrap{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.breath-circle{position:relative;width:170px;height:170px;border-radius:50%;border:0;background:none;cursor:pointer;display:grid;place-items:center;flex:none;font:inherit;color:#fff}
+.breath-core{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7fe0d6,#0f8b8d 70%);box-shadow:0 0 0 14px color-mix(in srgb,var(--brand) 18%,transparent),0 0 0 30px color-mix(in srgb,var(--brand) 9%,transparent);animation:breathe 8s ease-in-out infinite alternate;animation-play-state:paused}
+.breath-circle.on .breath-core{animation-play-state:running}
+.breath-label{position:relative;font-weight:800;text-align:center;padding:0 12px}
+@keyframes breathe{from{transform:scale(.78)}to{transform:scale(1.08)}}
+.weather-row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));margin:12px 0}
+.weather{font:inherit;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;border:2px solid var(--line);border-radius:20px;background:var(--surface);color:var(--ink);cursor:pointer;min-height:44px;transition:transform .15s,border-color .15s,background .15s}
+.weather:hover{transform:translateY(-3px);border-color:var(--accent)}
+.weather[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.wglyph{width:46px;height:46px}
+.weather-reply{font-weight:700;color:var(--accent);min-height:1.5em;margin:6px 0 4px}
+@media (max-width:520px){.breath-wrap{justify-content:center;text-align:center}.banner-text{margin:12px;padding:12px 14px;gap:12px}}
+@media (max-width:520px){.banner.world{padding-top:78px}.banner-text{margin:0 12px 12px}.banner.world .world-art{height:140px;bottom:auto}}

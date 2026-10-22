@@ -1,5 +1,6 @@
 import { api } from '../api.js';
 import { h, mount, link, errorBox, pageTitle } from '../ui.js';
+import { breathCard, worldArt } from '../worlds.js';
 import { heroArt, packIcon, packTone, stepIcon, trackIcon, trackTone } from '../icons.js';
 
 const FORMAT_LABEL = { checkin: 'Questions', scenario: 'Story choices' };
@@ -18,6 +19,7 @@ export async function hubView(root) {
           h('p', { class: 'lead' }, 'Friendly activities that help people talk about what is on their mind, and give the psychologist a clear starting point.'),
           h('button', { class: 'btn big', type: 'button', onClick: () => trackSection.scrollIntoView({ behavior: 'smooth' }) }, 'Begin a session')),
         heroArt()),
+      breathCard(),
       h('section', null,
         h('div', { class: 'steps' },
           step('everyday', 'sun', '1. Choose', 'Pick who the session is for, then an activity that fits the issue.'),
@@ -54,9 +56,10 @@ export async function trackView(root, trackId) {
     const grouped = GROUPS.map(([key, label]) => [label, packs.filter((p) => (key === 'general' ? !p.audience.some((a) => a === 'men' || a === 'women') : p.audience.includes(key)))]).filter(([, list]) => list.length);
     mount(root,
       h('div', { class: 'crumbs' }, link('#/', 'Home'), ' / ', track?.label ?? trackId),
-      h('div', { class: `banner tone-${trackTone(trackId)}` },
-        trackIcon(trackId, true),
-        h('div', null, h('h1', { style: { margin: 0 } }, track?.label ?? 'Activities'), h('p', { class: 'muted', style: { margin: 0 } }, track?.description ?? ''))),
+      h('div', { class: `banner world tone-${trackTone(trackId)}` },
+        worldArt(trackId),
+        h('div', { class: 'banner-text' }, trackIcon(trackId, true),
+          h('div', null, h('h1', { style: { margin: 0 } }, track?.label ?? 'Activities'), h('p', { class: 'muted', style: { margin: 0 } }, track?.description ?? '')))),
       packs.length
         ? grouped.map(([label, list]) => h('section', null,
             grouped.length > 1 ? h('div', { class: 'section-title' }, h('h2', null, label)) : null,
