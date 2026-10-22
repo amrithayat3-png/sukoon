@@ -1,4 +1,4 @@
-import { ConflictError, NotFoundError } from '../../core/errors.js';
+import { ConflictError, NotFoundError, TooManyRequestsError } from '../../core/errors.js';
 import type { EventBus } from '../../core/events.js';
 import { newCode, newId } from '../../core/ids.js';
 import type { Principal } from '../../core/route.js';
@@ -14,6 +14,8 @@ export interface SessionServiceDeps {
   events: EventBus;
   clock: () => Date;
   ttlMs: number;
+  /** Max sessions one key (or the shared open key) may create per hour. */
+  createLimitPerHour?: number;
 }
 
 export interface ResultsPayload {
@@ -26,6 +28,7 @@ export class SessionService {
 
   async create(principal: Principal, input: { packId: string; alias?: string | undefined }): Promise<SessionView> {
     const { repo, catalog, events, clock, ttlMs } = this.deps;
+    await this.enforceCreateLimit(principal);
     const pack = catalog.getPack(input.packId);
     const now = clock();
     const session: Session = {
@@ -109,6 +112,25 @@ export class SessionService {
     return removed.length;
   }
 
+  private readonly localHits = new Map<string, { count: number; resetAt: number }>();
+
+  private async enforceCreateLimit(principal: Principal): Promise<void> {
+    const limit = this.deps.createLimitPerHour ?? 0;
+    if (limit <= 0) return;
+    const { repo, clock } = this.deps;
+    let count: number;
+    if (repo.increment) {
+      count = await repo.increment(`sukoon:rl:create:${principal.keyId}`, 3600);
+    } else {
+      const now = clock().getTime();
+      const entry = this.localHits.get(principal.keyId);
+      if (!entry || entry.resetAt <= now) this.localHits.set(principal.keyId, { count: 1, resetAt: now + 3600_000 });
+      else entry.count += 1;
+      count = this.localHits.get(principal.keyId)?.count ?? 1;
+    }
+    if (count > limit) throw new TooManyRequestsError('Too many sessions started this hour. Please try again later.');
+  }
+
   /** Another clinician's session is reported as missing, not forbidden, so ids reveal nothing. */
   private async load(principal: Principal, id: string): Promise<Session> {
     const session = await this.deps.repo.get(id);
@@ -123,7 +145,7 @@ export class SessionService {
 
   private view(session: Session): SessionView {
     const pack = this.deps.catalog.getPack(session.packId);
-    return {
+    const view: SessionView = {
       id: session.id,
       code: session.code,
       packId: session.packId,
@@ -131,6 +153,9 @@ export class SessionService {
       expiresAt: session.expiresAt,
       answered: Object.keys(session.responses).length,
       total: this.deps.scoring.expectedAnswers(pack),
+      responses: { ...session.responses },
     };
+    if (session.alias) view.alias = session.alias;
+    return view;
   }
 }

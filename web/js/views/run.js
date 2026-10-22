@@ -14,15 +14,41 @@ export async function runView(root, sessionId) {
     const tone = `tone-${packTone(session.packId)}`;
     const cheerFor = (i, n) => (i === 0 ? 'Take your time. There are no right or wrong answers.' : i === n - 1 ? 'Last one. You are doing great!' : i === Math.floor(n / 2) ? 'Halfway there. Well done!' : '');
     const steps = view.format === 'checkin' ? view.items : view.scenarios;
-    const answers = {};
-    let index = 0;
+    // Answers already saved on the server (after a refresh) come back with the session.
+    const answers = { ...(session.responses || {}) };
+    const unsaved = new Set();
+    let index = steps.findIndex((s) => answers[s.id] === undefined);
+    if (index < 0) index = steps.length - 1;
     const save = (key, value) => api.save(sessionId, { [key]: value });
 
-    const finish = async () => {
+    // On Finish, resend anything that failed to save, retry briefly, then complete.
+    const flush = async () => {
+      let lastError;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        try {
+          if (unsaved.size) {
+            const batch = Object.fromEntries([...unsaved].map((k) => [k, answers[k]]));
+            await api.save(sessionId, batch);
+            unsaved.clear();
+          }
+          await api.complete(sessionId);
+          return;
+        } catch (e) {
+          lastError = e;
+          if (e.status && e.status < 500 && e.status !== 0) break;
+          await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+        }
+      }
+      throw lastError;
+    };
+    const finish = async (err) => {
+      err.replaceChildren(h('p', { class: 'muted', role: 'status' }, 'Saving your answers...'));
       try {
-        await api.complete(sessionId);
+        await flush();
         location.hash = `#/done/${sessionId}`;
-      } catch (err) { mount(root, errorBox(err.message)); }
+      } catch (e) {
+        err.replaceChildren(errorBox(`${e.message} Your answers are still here. Please press Finish again.`));
+      }
     };
 
     const render = () => {
@@ -30,13 +56,14 @@ export async function runView(root, sessionId) {
       const last = index === steps.length - 1;
       const pct = Math.round((index / steps.length) * 100);
       const err = h('div');
-      const next = h('button', { class: 'btn', disabled: answers[step.id] === undefined, onClick: () => (last ? finish() : (index += 1, render())) }, last ? 'Finish' : 'Next');
+      const next = h('button', { class: 'btn', disabled: answers[step.id] === undefined, onClick: () => (last ? finish(err) : (index += 1, render())) }, last ? 'Finish' : 'Next');
       const back = index > 0 ? h('button', { class: 'btn ghost', onClick: () => { index -= 1; render(); } }, 'Back') : null;
 
       const choose = async (value) => {
         answers[step.id] = value;
         err.replaceChildren();
-        try { await save(step.id, value); } catch (e) { err.append(errorBox(e.message)); }
+        unsaved.add(step.id);
+        try { await save(step.id, value); unsaved.delete(step.id); } catch { /* kept in memory and resent on Finish */ }
         render();
       };
 

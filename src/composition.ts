@@ -16,6 +16,7 @@ import { createHealthPillar } from './modules/health/index.js';
 import { CheckinScoring, ScenarioScoring, ScoringEngine } from './modules/scoring/index.js';
 import { FileSessionRepository } from './modules/sessions/file-repository.js';
 import { createSessionsPillar } from './modules/sessions/index.js';
+import { EncryptedSessionRepository } from './modules/sessions/encrypted-repository.js';
 import { RedisRestSessionRepository } from './modules/sessions/redis-repository.js';
 import { MemorySessionRepository } from './modules/sessions/memory-repository.js';
 import { RetentionSweeper } from './modules/sessions/retention.js';
@@ -60,15 +61,16 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
   const catalog = new CatalogService(await FileCatalogRepository.load(config.contentDir));
   const scoring = new ScoringEngine().register(new CheckinScoring()).register(new ScenarioScoring());
 
-  const repo: SessionRepository =
+  const baseRepo: SessionRepository =
     options.sessionRepo ??
     (config.storeDriver === 'file'
       ? await FileSessionRepository.open(path.join(config.dataDir, 'sessions.json'))
       : config.storeDriver === 'redis'
         ? createRedisRepo(config, clock)
         : new MemorySessionRepository());
+  const repo: SessionRepository = config.encryptionKey ? new EncryptedSessionRepository(baseRepo, config.encryptionKey) : baseRepo;
 
-  const sessions = new SessionService({ repo, catalog, scoring, events, clock, ttlMs: config.sessionTtlMs });
+  const sessions = new SessionService({ repo, catalog, scoring, events, clock, ttlMs: config.sessionTtlMs, createLimitPerHour: config.createLimitPerHour });
   const keyRing = new KeyRing(config.clinicianKeys);
   const ai = createAiRegistry({
     enabled: config.aiEnabled,
@@ -88,7 +90,7 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
             if (catalog.packCount() === 0) throw new Error('No activity packs loaded.');
           },
         },
-        { name: 'sessionStore', run: async () => void (await repo.count()) },
+        { name: 'sessionStore', run: async () => void (await (repo.ping ? repo.ping() : repo.count())) },
       ],
     }),
     createAuthPillar(),

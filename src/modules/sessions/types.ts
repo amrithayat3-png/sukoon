@@ -16,6 +16,8 @@ export interface Session {
   updatedAt: string;
   completedAt?: string;
   expiresAt: string;
+  /** Encrypted payload (responses and alias) when at-rest encryption is on. */
+  sealed?: string;
 }
 
 export interface SessionView {
@@ -26,6 +28,9 @@ export interface SessionView {
   expiresAt: string;
   answered: number;
   total: number;
+  /** Saved answers, so a refreshed page can resume where it stopped. */
+  responses: Responses;
+  alias?: string;
 }
 
 /** Port: where sessions live. Memory and file adapters ship; a Postgres adapter plugs in here. */
@@ -37,5 +42,9 @@ export interface SessionRepository {
   /** Removes sessions that expired at or before `nowIso`. Returns the removed ids. */
   deleteExpired(nowIso: string): Promise<string[]>;
   count(): Promise<number>;
+  /** Cheap liveness probe used by /ready. Falls back to count() when absent. */
+  ping?(): Promise<void>;
+  /** Fixed-window counter for rate limiting. Optional; memory is used when absent. */
+  increment?(key: string, windowSeconds: number): Promise<number>;
   close?(): Promise<void>;
 }

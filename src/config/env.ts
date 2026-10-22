@@ -27,6 +27,8 @@ const EnvSchema = z.object({
   RATE_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(300),
   AI_ENABLED: booleanString.default('false'),
   OPEN_ACCESS: booleanString.default('false'),
+  SESSION_ENCRYPTION_KEY: z.string().min(32, 'SESSION_ENCRYPTION_KEY must be at least 32 characters.').optional(),
+  SESSION_CREATE_LIMIT_PER_HOUR: z.coerce.number().int().min(0).default(120),
 });
 
 export interface Config {
@@ -42,6 +44,8 @@ export interface Config {
   readonly storeDriver: 'memory' | 'file' | 'redis';
   readonly redisUrl: string | undefined;
   readonly redisToken: string | undefined;
+  readonly encryptionKey: string | undefined;
+  readonly createLimitPerHour: number;
   readonly dataDir: string;
   readonly contentDir: string;
   readonly webDir: string;
@@ -113,6 +117,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     rateLimitPerMinute: e.RATE_LIMIT_PER_MINUTE,
     aiEnabled: e.AI_ENABLED,
     openAccess: e.OPEN_ACCESS,
+    encryptionKey: e.SESSION_ENCRYPTION_KEY,
+    createLimitPerHour: e.SESSION_CREATE_LIMIT_PER_HOUR,
   };
 }
 

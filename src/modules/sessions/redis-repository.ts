@@ -87,6 +87,13 @@ export class RedisRestSessionRepository implements SessionRepository {
     return total;
   }
 
+  /** Fixed-window counter used for rate limiting; works across serverless instances. */
+  async increment(key: string, windowSeconds: number): Promise<number> {
+    const n = await this.command<number>('INCR', key);
+    if (n === 1) await this.command('EXPIRE', key, windowSeconds);
+    return n;
+  }
+
   /** Readiness probe: throws if the store is unreachable or the token is wrong. */
   async ping(): Promise<void> {
     await this.command('PING');
