@@ -12,6 +12,21 @@ import { referencesView } from './views/references.js';
 import { aboutView } from './views/about.js';
 
 const root = document.getElementById('main');
+document.body.prepend(h('div', { class: 'aurora', 'aria-hidden': 'true' }, h('i', { class: 'a1' }), h('i', { class: 'a2' }), h('i', { class: 'a3' })));
+
+// Gentle reveal on scroll. Elements are marked by script, so without JS everything stays visible.
+const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const seen = 'IntersectionObserver' in window && !calm
+  ? new IntersectionObserver((entries) => { for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); seen.unobserve(e.target); } }, { threshold: 0.12 })
+  : null;
+function reveal() {
+  root.querySelectorAll('.card, .step, .section-title, .reveal, .banner').forEach((el, i) => {
+    if (!seen) return;
+    el.classList.add('reveal');
+    el.classList.add(`rd${i % 4}`);
+    seen.observe(el);
+  });
+}
 const nav = document.getElementById('topnav');
 
 document.getElementById('brand').append(logo(38), h('span', { class: 'wordmark' }, 'Sukoon'));
@@ -53,7 +68,7 @@ function route() {
     if (!match) continue;
     if (needsKey && !state.open && !keyStore.get()) { location.hash = '#/login'; return; }
     if (path === '/login' && state.open) { location.hash = '#/'; return; }
-    view(root, ...match.slice(1));
+    Promise.resolve(view(root, ...match.slice(1))).then(reveal);
     return;
   }
   location.hash = '#/';

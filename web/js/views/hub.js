@@ -1,6 +1,6 @@
 import { api } from '../api.js';
 import { h, mount, link, errorBox, pageTitle } from '../ui.js';
-import { breathCard, worldArt } from '../worlds.js';
+import { breatheSection, worldArt } from '../worlds.js';
 import { heroArt, packIcon, packTone, stepIcon, trackIcon, trackTone } from '../icons.js';
 
 const FORMAT_LABEL = { checkin: 'Questions', scenario: 'Story choices' };
@@ -17,9 +17,10 @@ export async function hubView(root) {
           h('h1', { class: 'hero-title' }, 'Sukoon'),
           h('p', { class: 'hero-tag' }, 'A calmer conversation starts here.'),
           h('p', { class: 'lead' }, 'Friendly activities that help people talk about what is on their mind, and give the psychologist a clear starting point.'),
-          h('button', { class: 'btn big', type: 'button', onClick: () => trackSection.scrollIntoView({ behavior: 'smooth' }) }, 'Begin a session')),
-        heroArt()),
-      breathCard(),
+          h('button', { class: 'btn big glow', type: 'button', onClick: () => trackSection.scrollIntoView({ behavior: 'smooth' }) }, 'Begin a session'),
+          h('div', { class: 'trust' }, ['No names needed', 'Answers erased automatically', 'Phone, tablet and laptop'].map((t) => h('span', { class: 'trust-chip' }, h('i', { 'aria-hidden': 'true' }), t)))),
+        h('div', { class: 'hero-frame' }, heroArt())),
+      breatheSection(),
       h('section', null,
         h('div', { class: 'steps' },
           step('everyday', 'sun', '1. Choose', 'Pick who the session is for, then an activity that fits the issue.'),
@@ -27,10 +28,10 @@ export async function hubView(root) {
           step('stress', 'mint', '3. Talk it through', 'A simple summary shows where to start the conversation.'))),
       trackSection);
     trackSection.append(
-      h('div', { class: 'section-title' }, h('h2', null, 'Who is this session for?')),
+      h('div', { class: 'section-title' }, h('div', null, h('span', { class: 'eyebrow' }, 'Choose a path'), h('h2', null, 'Who is this session for?'))),
       h('div', { class: 'grid' }, tracks.map((t) =>
         h('a', { class: `card tile tone-${trackTone(t.id)}`, href: `#/track/${t.id}`, 'aria-label': `${t.label}, ages ${t.ageRange}, ${t.packCount} activities` },
-          trackIcon(t.id, true),
+          h('div', { class: 'tile-scene' }, worldArt(t.id), trackIcon(t.id, true)),
           h('h3', null, t.label),
           h('span', { class: 'chip' }, `Ages ${t.ageRange}`),
           h('p', null, t.description),

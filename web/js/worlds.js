@@ -58,28 +58,60 @@ export function worldArt(trackId, cls = 'world-art') {
 
 export const WORLD_NAME = { kids: 'the garden', teens: 'the city at dusk', adults: 'the winding path', seniors: 'the sunrise porch' };
 
-/** Breathing circle: a calm 30 second guided moment. All text, no data leaves the device. */
-export function breathCard() {
-  const label = h('div', { class: 'breath-label', 'aria-live': 'polite' }, 'Tap to begin');
-  const sub = h('div', { class: 'small muted' }, 'A 30 second breathing moment, just for you.');
-  const circle = h('button', { class: 'breath-circle', type: 'button', 'aria-label': 'Start a 30 second breathing moment' }, h('span', { class: 'breath-core' }), label);
-  let timer = null;
-  const stop = (msg) => { clearInterval(timer); timer = null; circle.classList.remove('on'); label.textContent = msg; };
-  circle.addEventListener('click', () => {
-    if (timer) { stop('Tap to begin'); return; }
-    let t = 0;
-    circle.classList.add('on');
-    const tick = () => {
-      if (!circle.isConnected) { stop(''); return; }
-      if (t >= 30) { stop('Well done'); return; }
-      label.textContent = Math.floor(t / 4) % 2 === 0 ? 'Breathe in' : 'Breathe out';
-      t += 1;
+/**
+ * The signature moment: a 30 second guided breath. Orb grows for 4s, rests 1s, softens for 5s,
+ * three times. A ring fills as time passes. Everything is local; nothing is sent anywhere.
+ */
+export function breatheSection() {
+  const R = 142, C = 2 * Math.PI * R;
+  const word = h('div', { class: 'orb-word' }, 'Ready?');
+  const count = h('div', { class: 'orb-count', 'aria-hidden': 'true' }, '');
+  const live = h('div', { class: 'sr-only', 'aria-live': 'polite' }, '');
+  const prog = s('circle', { cx: 150, cy: 150, r: R, class: 'ring-prog', 'stroke-dasharray': C, fill: 'none' });
+  prog.style.strokeDashoffset = String(C);
+  const ring = s('svg', { viewBox: '0 0 300 300', class: 'ring', 'aria-hidden': 'true', focusable: 'false' },
+    s('circle', { cx: 150, cy: 150, r: R, class: 'ring-track', fill: 'none' }),
+    s('circle', { cx: 150, cy: 150, r: 128, class: 'ring-dots', fill: 'none' }),
+    prog);
+  const orb = h('div', { class: 'orb' }, h('span', { class: 'orb-glow' }), h('span', { class: 'orb-core' }), h('span', { class: 'orb-shine' }),
+    h('div', { class: 'orb-text' }, word, count));
+  const stage = h('div', { class: 'orb-stage', 'data-phase': 'idle' }, ring, orb,
+    ...[1, 2, 3, 4, 5, 6].map((n) => h('i', { class: `mote m${n}` })));
+  const btn = h('button', { class: 'btn big glow', type: 'button' }, 'Begin 30 seconds');
+  let raf = 0;
+  const finish = (msg, phase) => { cancelAnimationFrame(raf); raf = 0; stage.dataset.phase = phase; word.textContent = msg; count.textContent = ''; btn.textContent = phase === 'done' ? 'Breathe again' : 'Begin 30 seconds'; };
+  btn.addEventListener('click', () => {
+    if (raf) { finish('Ready?', 'idle'); prog.style.strokeDashoffset = String(C); return; }
+    const t0 = performance.now();
+    btn.textContent = 'Stop';
+    let last = '';
+    const frame = (now) => {
+      if (!stage.isConnected) { finish('', 'idle'); return; }
+      const t = (now - t0) / 1000;
+      if (t >= 30) { prog.style.strokeDashoffset = '0'; finish('Well done', 'done'); live.textContent = 'Well done'; return; }
+      prog.style.strokeDashoffset = String(C * (1 - t / 30));
+      const c = t % 10;
+      const phase = c < 4 ? 'in' : c < 5 ? 'hold' : 'out';
+      const left = phase === 'in' ? 4 - c : phase === 'hold' ? 5 - c : 10 - c;
+      if (phase !== last) {
+        last = phase;
+        stage.dataset.phase = phase;
+        word.textContent = phase === 'in' ? 'Breathe in' : phase === 'hold' ? 'Hold gently' : 'Breathe out';
+        live.textContent = word.textContent;
+      }
+      count.textContent = String(Math.ceil(left));
+      raf = requestAnimationFrame(frame);
     };
-    tick();
-    timer = setInterval(tick, 1000);
+    raf = requestAnimationFrame(frame);
   });
-  return h('section', { class: 'card breath' }, h('div', { class: 'breath-wrap' }, circle,
-    h('div', null, h('h2', null, 'Take a calm moment'), h('p', { class: 'muted' }, 'Breathe in as the circle grows, out as it softens. Good to do together before an activity.'), sub)));
+  return h('section', { class: 'breathe reveal' },
+    h('div', { class: 'breathe-stars', 'aria-hidden': 'true' }),
+    h('div', { class: 'breathe-copy' },
+      h('span', { class: 'eyebrow light' }, 'A calm moment'),
+      h('h2', null, 'Breathe together before you begin'),
+      h('p', null, 'Follow the glow. In for four, a gentle rest, then a slow breath out. Thirty seconds is enough to settle a room.'),
+      btn, live),
+    stage);
 }
 
 const WEATHER = [
