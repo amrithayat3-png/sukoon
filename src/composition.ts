@@ -1,5 +1,6 @@
 import path from 'node:path';
 import type { Config } from './config/env.js';
+import { UnauthorizedError } from './core/errors.js';
 import { EventBus } from './core/events.js';
 import type { Logger } from './core/logger.js';
 import { noopLogger } from './core/logger.js';
@@ -16,6 +17,7 @@ import { createHealthPillar } from './modules/health/index.js';
 import { CheckinScoring, ScenarioScoring, ScoringEngine } from './modules/scoring/index.js';
 import { FileSessionRepository } from './modules/sessions/file-repository.js';
 import { createSessionsPillar } from './modules/sessions/index.js';
+import { AccountService, MemoryKv, RedisKv, createAccountsPillar } from './modules/accounts/index.js';
 import { EncryptedSessionRepository } from './modules/sessions/encrypted-repository.js';
 import { RedisRestSessionRepository } from './modules/sessions/redis-repository.js';
 import { MemorySessionRepository } from './modules/sessions/memory-repository.js';
@@ -38,7 +40,7 @@ export interface Platform {
   readonly sessions: SessionService;
   readonly catalog: CatalogService;
   readonly events: EventBus;
-  authenticate(header: string | undefined): Principal;
+  authenticate(header: string | undefined, kind?: 'clinician' | 'admin'): Principal;
   start(): void;
   stop(): Promise<void>;
 }
@@ -70,7 +72,12 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
         : new MemorySessionRepository());
   const repo: SessionRepository = config.encryptionKey ? new EncryptedSessionRepository(baseRepo, config.encryptionKey) : baseRepo;
 
-  const sessions = new SessionService({ repo, catalog, scoring, events, clock, ttlMs: config.sessionTtlMs, createLimitPerHour: config.createLimitPerHour });
+  const accounts = config.saasMode && config.authSecret
+    ? new AccountService(
+        config.storeDriver === 'redis' && config.redisUrl && config.redisToken ? new RedisKv({ url: config.redisUrl, token: config.redisToken }) : new MemoryKv(),
+        config.authSecret, config.adminKey, clock)
+    : undefined;
+  const sessions = new SessionService({ repo, catalog, scoring, events, clock, ttlMs: config.sessionTtlMs, createLimitPerHour: config.createLimitPerHour, ...(accounts ? { gate: accounts.gate } : {}) });
   const keyRing = new KeyRing(config.clinicianKeys);
   const ai = createAiRegistry({
     enabled: config.aiEnabled,
@@ -83,6 +90,7 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
       appName: config.appName,
       appVersion: config.appVersion,
       openAccess: config.openAccess,
+      saas: config.saasMode,
       checks: [
         {
           name: 'catalog',
@@ -97,6 +105,7 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
     createCatalogPillar(catalog),
     createSessionsPillar(sessions),
     createAiPillar(ai),
+    ...(accounts ? [createAccountsPillar(accounts)] : []),
   ];
 
   const routes = pillars.flatMap((pillar) => pillar.routes());
@@ -111,7 +120,18 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
     sessions,
     catalog,
     events,
-    authenticate: (header) => {
+    authenticate: (header, kind = 'clinician') => {
+      const bearer = header?.startsWith('Bearer ') ? header.slice(7).trim() : undefined;
+      if (kind === 'admin') {
+        const admin = accounts?.verifyAdmin(bearer);
+        if (!admin) throw new UnauthorizedError('A valid admin key is required.');
+        return admin;
+      }
+      if (accounts) {
+        const person = accounts.verifyToken(bearer) ?? keyRing.verify(bearer);
+        if (!person) throw new UnauthorizedError('Please sign in.');
+        return person;
+      }
       if (!config.openAccess) return keyRing.authenticate(header);
       // Open access: a valid key still maps to its own id, everyone else shares one.
       const token = header?.startsWith('Bearer ') ? header.slice(7).trim() : undefined;

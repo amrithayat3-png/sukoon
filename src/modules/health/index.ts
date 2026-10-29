@@ -5,6 +5,7 @@ export interface HealthDeps {
   appName: string;
   appVersion: string;
   openAccess?: boolean;
+  saas?: boolean;
   /** Readiness probes. Each must throw if its dependency is not usable. */
   checks: ReadonlyArray<{ name: string; run: () => void | Promise<void> }>;
 }
@@ -49,7 +50,7 @@ export function createHealthPillar(deps: HealthDeps): Pillar {
           method: 'GET',
           path: '/api/v1/meta',
           auth: 'public',
-          handler: () => ({ appName: deps.appName, version: deps.appVersion, openAccess: deps.openAccess ?? false }),
+          handler: () => ({ appName: deps.appName, version: deps.appVersion, openAccess: deps.openAccess ?? false, saas: deps.saas ?? false }),
         },
       ];
     },

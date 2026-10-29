@@ -8,6 +8,8 @@ export interface Session {
   packVersion: string;
   /** Which clinician key owns the session. Other keys cannot see it. */
   keyId: string;
+  /** Institute that owns the session (SaaS mode). */
+  orgId?: string;
   /** Optional clinician-entered label. The UI asks for initials or a nickname, never a full name. */
   alias?: string;
   status: 'active' | 'completed';

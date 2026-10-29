@@ -16,6 +16,8 @@ export interface SessionServiceDeps {
   ttlMs: number;
   /** Max sessions one key (or the shared open key) may create per hour. */
   createLimitPerHour?: number;
+  /** SaaS hook: refuses creation when an institute is paused, expired or over its plan. */
+  gate?: { beforeCreate(principal: Principal): Promise<void> };
 }
 
 export interface ResultsPayload {
@@ -29,6 +31,7 @@ export class SessionService {
   async create(principal: Principal, input: { packId: string; alias?: string | undefined }): Promise<SessionView> {
     const { repo, catalog, events, clock, ttlMs } = this.deps;
     await this.enforceCreateLimit(principal);
+    await this.deps.gate?.beforeCreate(principal);
     const pack = catalog.getPack(input.packId);
     const now = clock();
     const session: Session = {
@@ -43,6 +46,7 @@ export class SessionService {
       updatedAt: now.toISOString(),
       expiresAt: new Date(now.getTime() + ttlMs).toISOString(),
     };
+    if (principal.orgId) session.orgId = principal.orgId;
     if (input.alias) session.alias = input.alias;
     await repo.create(session);
     events.emit('session.created', { sessionId: session.id, packId: pack.id, keyId: principal.keyId });

@@ -6,7 +6,9 @@
  */
 export interface Principal {
   readonly keyId: string;
-  readonly role: 'clinician';
+  readonly role: 'clinician' | 'admin';
+  /** Set in SaaS mode: the institute this person belongs to. */
+  readonly orgId?: string;
 }
 
 export interface RouteContext {
@@ -20,7 +22,7 @@ export interface RouteContext {
 export interface RouteDef {
   readonly method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   readonly path: string;
-  readonly auth: 'public' | 'clinician';
+  readonly auth: 'public' | 'clinician' | 'admin';
   readonly status?: number;
   readonly rateLimit?: { readonly max: number; readonly timeWindow: string };
   handler(context: RouteContext): Promise<unknown> | unknown;

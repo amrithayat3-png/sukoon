@@ -45,7 +45,7 @@ export async function dispatch(
     if (!params) continue;
     try {
       const principal =
-        route.auth === 'clinician' ? platform.authenticate(request.headers?.['authorization']) : null;
+        route.auth === 'public' ? null : platform.authenticate(request.headers?.['authorization'], route.auth);
       const result = await route.handler({
         params,
         query,

@@ -41,3 +41,9 @@ export class TooManyRequestsError extends AppError {
     super(429, 'RATE_LIMITED', message);
   }
 }
+
+export class ForbiddenError extends AppError {
+  constructor(message = 'You do not have access to this.') {
+    super(403, 'FORBIDDEN', message);
+  }
+}

@@ -1,4 +1,5 @@
-import { api } from '../api.js';
+import { api, keyStore } from '../api.js';
+import { state } from '../state.js';
 import { h, mount, link, errorBox, pageTitle } from '../ui.js';
 import { breatheSection, worldArt } from '../worlds.js';
 import { heroArt, packIcon, packTone, stepIcon, trackIcon, trackTone } from '../icons.js';
@@ -9,8 +10,14 @@ export async function hubView(root) {
   pageTitle('Welcome');
   try {
     const { tracks } = await api.tracks();
+    const acct = state.saas && keyStore.get() ? await api.me().catch(() => null) : null;
     const trackSection = h('section', { id: 'tracks' });
     mount(root,
+      acct ? h('div', { class: 'acct' },
+        h('strong', null, acct.org.name),
+        h('span', { class: 'chip' }, acct.org.plan === 'paid' ? 'Paid plan' : 'Free pilot'),
+        h('span', { class: 'small muted' }, `${acct.org.sessionsThisMonth} of ${acct.org.monthlySessionLimit} sessions used this month`),
+        acct.org.expiresAt ? h('span', { class: 'small muted' }, `Access until ${acct.org.expiresAt.slice(0, 10)}`) : null) : null,
       h('section', { class: 'hero' },
         h('div', null,
           h('span', { class: 'chip' }, 'Welcome'),

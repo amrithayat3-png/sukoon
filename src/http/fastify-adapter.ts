@@ -8,7 +8,7 @@ import type { Principal, RouteDef } from '../core/route.js';
 export function registerRoutes(
   app: FastifyInstance,
   routes: readonly RouteDef[],
-  authenticate: (header: string | undefined) => Principal,
+  authenticate: (header: string | undefined, kind?: 'clinician' | 'admin') => Principal,
 ): void {
   for (const route of routes) {
     app.route({
@@ -16,7 +16,7 @@ export function registerRoutes(
       url: route.path,
       config: route.rateLimit ? { rateLimit: route.rateLimit } : {},
       handler: async (request, reply) => {
-        const principal = route.auth === 'clinician' ? authenticate(request.headers.authorization) : null;
+        const principal = route.auth === 'public' ? null : authenticate(request.headers.authorization, route.auth);
         const result = await route.handler({
           params: (request.params ?? {}) as Record<string, string>,
           query: (request.query ?? {}) as Record<string, unknown>,

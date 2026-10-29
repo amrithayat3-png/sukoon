@@ -27,6 +27,9 @@ const EnvSchema = z.object({
   RATE_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(300),
   AI_ENABLED: booleanString.default('false'),
   OPEN_ACCESS: booleanString.default('false'),
+  SAAS_MODE: booleanString.default('false'),
+  AUTH_SECRET: z.string().min(32, 'AUTH_SECRET must be at least 32 characters.').optional(),
+  ADMIN_KEY: z.string().min(16, 'ADMIN_KEY must be at least 16 characters.').optional(),
   SESSION_ENCRYPTION_KEY: z.string().min(32, 'SESSION_ENCRYPTION_KEY must be at least 32 characters.').optional(),
   SESSION_CREATE_LIMIT_PER_HOUR: z.coerce.number().int().min(0).default(120),
 });
@@ -44,6 +47,9 @@ export interface Config {
   readonly storeDriver: 'memory' | 'file' | 'redis';
   readonly redisUrl: string | undefined;
   readonly redisToken: string | undefined;
+  readonly saasMode: boolean;
+  readonly authSecret: string | undefined;
+  readonly adminKey: string | undefined;
   readonly encryptionKey: string | undefined;
   readonly createLimitPerHour: number;
   readonly dataDir: string;
@@ -85,7 +91,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   let clinicianKeys = configured;
   let usingDevKey = false;
   if (configured.length === 0) {
-    if (e.OPEN_ACCESS) {
+    if (e.OPEN_ACCESS || e.SAAS_MODE) {
       clinicianKeys = [];
     } else {
       if (e.NODE_ENV === 'production') {
@@ -96,6 +102,10 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     }
   }
 
+  if (e.SAAS_MODE && !e.AUTH_SECRET) throw new ConfigError('SAAS_MODE=true needs AUTH_SECRET (32+ random characters).');
+  if (e.SAAS_MODE && e.NODE_ENV === 'production' && e.STORE_DRIVER === 'memory') {
+    throw new ConfigError('SAAS_MODE in production needs STORE_DRIVER=redis so accounts survive restarts.');
+  }
   const resolve = (dir: string): string => path.resolve(process.cwd(), dir);
 
   return {
@@ -117,6 +127,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     rateLimitPerMinute: e.RATE_LIMIT_PER_MINUTE,
     aiEnabled: e.AI_ENABLED,
     openAccess: e.OPEN_ACCESS,
+    saasMode: e.SAAS_MODE,
+    authSecret: e.AUTH_SECRET,
+    adminKey: e.ADMIN_KEY,
     encryptionKey: e.SESSION_ENCRYPTION_KEY,
     createLimitPerHour: e.SESSION_CREATE_LIMIT_PER_HOUR,
   };

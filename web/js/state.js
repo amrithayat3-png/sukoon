@@ -1,5 +1,6 @@
 /** In-memory state for the current visit. Nothing about a patient is written to browser storage. */
 export const state = {
+  saas: false,        // true when psychologists sign in with their own accounts
   open: false,        // true when the server runs without access keys
   locks: new Map(),   // sessionId -> PIN chosen by the clinician (a courtesy lock, not security)
   unlocked: new Set(),

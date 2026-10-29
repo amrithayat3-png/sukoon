@@ -10,6 +10,7 @@ import { handoffView } from './views/handoff.js';
 import { resultsView } from './views/results.js';
 import { referencesView } from './views/references.js';
 import { aboutView } from './views/about.js';
+import { adminView } from './views/admin.js';
 
 const root = document.getElementById('main');
 document.body.prepend(h('div', { class: 'aurora', 'aria-hidden': 'true' }, h('i', { class: 'a1' }), h('i', { class: 'a2' }), h('i', { class: 'a3' })));
@@ -31,7 +32,7 @@ const nav = document.getElementById('topnav');
 
 document.getElementById('brand').append(logo(38), h('span', { class: 'wordmark' }, 'Sukoon'));
 document.getElementById('foot').append(
-  'Sukoon, a calmer conversation. ', h('a', { href: '#/about' }, 'About this tool'));
+  'Sukoon, a calmer conversation. ', h('a', { href: '#/about' }, 'About this tool'), ' | ', h('a', { href: '#/admin' }, 'Institute admin'));
 
 function renderNav() {
   const p = prefs();
@@ -56,6 +57,7 @@ const routes = [
   [/^\/results\/([0-9a-f-]{36})$/, resultsView],
   [/^\/references$/, referencesView],
   [/^\/about$/, aboutView, false],
+  [/^\/admin$/, adminView, false],
 ];
 
 function route() {
@@ -77,6 +79,6 @@ function route() {
 apply();
 window.addEventListener('hashchange', route);
 (async () => {
-  try { state.open = Boolean((await api.meta()).openAccess); } catch { state.open = false; }
+  try { const meta = await api.meta(); state.open = Boolean(meta.openAccess); state.saas = Boolean(meta.saas); } catch { state.open = false; }
   route();
 })();

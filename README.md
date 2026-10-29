@@ -59,3 +59,13 @@ By default Sukoon needs an access key. For an open, welcome-and-start experience
 2. Verify references marked `verified: false` in `content/references.json`.
 3. Agree a clinical protocol for the safety item (it raises a flag; it does not assess risk).
 4. Decide data retention and consent wording with your clients and legal adviser.
+
+## SaaS mode (institutes and accounts)
+
+Set `SAAS_MODE=true`, `AUTH_SECRET` (32+ chars) and `ADMIN_KEY` (16+ chars), keep `STORE_DRIVER=redis`, and set `OPEN_ACCESS=false`.
+
+- Open `/#/admin`, enter the admin key, and create an institute. You get an invite code to share with that institute.
+- Psychologists open the site, choose "I have an invite code", and create their own account (email and password).
+- Each institute has a plan (free pilot or paid), a monthly session cap, an optional end date, and can be paused. These are enforced when a session starts.
+- Sessions belong to the psychologist who started them. Other psychologists and other institutes cannot open them.
+- Accounts are stored in the same Redis database (no expiry). For long-term growth, plan a move to Postgres behind the `KvStore` port.

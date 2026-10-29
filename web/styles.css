@@ -253,3 +253,5 @@ main{max-width:1120px}
 .tile-scene{overflow:visible!important;border-radius:0!important}
 .tile-scene .world-art{border-radius:0}
 .tile-scene .icon-bubble{z-index:2}
+.acct{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);margin-bottom:14px;width:fit-content;max-width:100%}
+.code{font:800 1.15rem ui-monospace,Consolas,monospace;letter-spacing:.12em;padding:.1rem .6rem;border-radius:8px;background:var(--brand-soft);user-select:all}
