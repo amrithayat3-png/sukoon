@@ -4,7 +4,7 @@ import { h, mount, link, errorBox, pageTitle } from '../ui.js';
 import { breatheSection, worldArt } from '../worlds.js';
 import { heroArt, packIcon, packTone, stepIcon, trackIcon, trackTone } from '../icons.js';
 
-const FORMAT_LABEL = { checkin: 'Questions', scenario: 'Story choices' };
+const FORMAT_LABEL = { checkin: 'Questions', scenario: 'Story choices', measure: 'Questionnaire' };
 
 export async function hubView(root) {
   pageTitle('Welcome');
@@ -27,6 +27,7 @@ export async function hubView(root) {
           h('button', { class: 'btn big glow', type: 'button', onClick: () => trackSection.scrollIntoView({ behavior: 'smooth' }) }, 'Begin a session'),
           h('div', { class: 'trust' }, ['No names needed', 'Answers erased automatically', 'Phone, tablet and laptop'].map((t) => h('span', { class: 'trust-chip' }, h('i', { 'aria-hidden': 'true' }), t)))),
         h('div', { class: 'hero-frame' }, heroArt())),
+      h('div', { class: 'row' }, link('#/set', 'Build a custom set', 'btn ghost'), state.saas ? link('#/usage', 'Usage', 'btn ghost') : null),
       breatheSection(),
       h('section', null,
         h('div', { class: 'steps' },

@@ -3,6 +3,7 @@ import { state } from '../state.js';
 import { h, mount, errorBox, pageTitle } from '../ui.js';
 import { packIcon, packTone } from '../icons.js';
 import { worldArt } from '../worlds.js';
+import { openPause, readAloud, seedling } from '../extras.js';
 
 export async function runView(root, sessionId) {
   try {
@@ -14,7 +15,7 @@ export async function runView(root, sessionId) {
     const view = detail.patientView;
     const tone = `tone-${packTone(session.packId)}`;
     const cheerFor = (i, n) => (i === 0 ? (state.mood === 'stormy' || state.mood === 'rainy' ? 'Thank you for being here. We will go gently, one step at a time.' : 'Take your time. There are no right or wrong answers.') : i === n - 1 ? 'Last one. You are doing great!' : i === Math.floor(n / 2) ? 'Halfway there. Well done!' : '');
-    const steps = view.format === 'checkin' ? view.items : view.scenarios;
+    const steps = view.format === 'scenario' ? view.scenarios : view.items;
     // Answers already saved on the server (after a refresh) come back with the session.
     const answers = { ...(session.responses || {}) };
     const unsaved = new Set();
@@ -69,9 +70,10 @@ export async function runView(root, sessionId) {
       };
 
       let body;
-      if (view.format === 'checkin') {
+      if (view.format !== 'scenario') {
         body = [
           h('p', { class: 'muted' }, view.prompt),
+          view.timeframe ? h('p', null, h('span', { class: 'chip timeframe' }, view.timeframe)) : null,
           h('h2', { class: 'q', id: 'q' }, step.text),
           h('div', { class: 'scale', role: 'group', 'aria-labelledby': 'q' }, view.scale.map((s, level) =>
             h('button', { class: 'choice', type: 'button', 'aria-pressed': String(answers[step.id] === s.value), onClick: () => choose(s.value) },
@@ -92,14 +94,18 @@ export async function runView(root, sessionId) {
               h('strong', null, o.id === picked ? 'You chose: ' : 'Another choice: '), o.text, h('p', { class: 'small' }, o.outcome)))) : null,
         ];
       }
+      const speak = readAloud(() => (view.format === 'scenario' ? `${step.title}. ${step.story}` : `${view.timeframe ? `${view.timeframe}. ` : ''}${step.text}`));
+      const stage = Math.min(5, Math.floor((index / steps.length) * 6) + (last ? 1 : 0));
       root.className = `${tone}${detail.summary.track === 'seniors' ? ' senior' : ''}`;
       mount(root, h('div', { class: 'patient' },
         h('div', { class: 'strip' }, worldArt(detail.summary.track, 'world-art')),
-        h('div', { class: 'runhead' }, packIcon(session.packId), h('div', null, h('strong', null, view.title), h('div', { class: 'small muted' }, `${index + 1} of ${steps.length}`))),
+        h('div', { class: 'runhead' }, packIcon(session.packId), h('div', { class: 'grow' }, h('strong', null, view.title), h('div', { class: 'small muted' }, `${index + 1} of ${steps.length}`)), seedling(stage)),
         h('div', { class: 'progress', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-valuenow': pct }, h('span', { style: { width: `${pct}%` } })),
         h('div', { class: 'cheer', 'aria-live': 'polite' }, cheerFor(index, steps.length)),
         body, err,
-        h('div', { class: 'row', style: { marginTop: '20px' } }, back, next)));
+        h('div', { class: 'row', style: { marginTop: '20px' } }, back, next),
+        h('div', { class: 'row between runtools noprint' }, speak, h('button', { class: 'btn ghost small', type: 'button', onClick: openPause }, 'Take a pause')),
+        detail.summary.source ? h('p', { class: 'small muted source-line' }, `Source: ${detail.summary.source.attribution}`) : null));
     };
     render();
   } catch (err) { mount(root, errorBox(err.status === 404 ? 'This session has ended or expired.' : err.message)); }

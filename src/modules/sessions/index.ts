@@ -16,6 +16,19 @@ const ResponsesBody = z.object({
     .refine((value) => Object.keys(value).length <= 200, 'Too many answers in one request.'),
 });
 
+const ExtrasBody = z
+  .object({
+    notes: z.string().max(4000),
+    homework: z.array(z.string().max(41)).max(9),
+    moodStart: z.string().max(20),
+    moodEnd: z.string().max(20),
+    reflection: z.string().max(20),
+    bodyMap: z.array(z.string().max(20)).max(8),
+    consent: z.boolean(),
+  })
+  .partial()
+  .strict();
+
 const SessionId = z.string().uuid();
 
 export function createSessionsPillar(sessions: SessionService): Pillar {
@@ -52,6 +65,13 @@ export function createSessionsPillar(sessions: SessionService): Pillar {
               body.responses,
             );
           },
+        },
+        {
+          method: 'PUT',
+          path: '/api/v1/sessions/:id/extras',
+          auth: 'clinician',
+          handler: (context) =>
+            sessions.updateExtras(requirePrincipal(context), SessionId.parse(context.params['id']), ExtrasBody.parse(context.body)),
         },
         {
           method: 'POST',

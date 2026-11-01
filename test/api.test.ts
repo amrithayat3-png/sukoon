@@ -57,10 +57,10 @@ describe('catalog', () => {
   it('lists tracks with pack counts and packs by track', async () => {
     const tracks = (asJson((await h.call('GET', '/api/v1/tracks')).body)['tracks'] as Json[]) ?? [];
     assert.equal(tracks.length, 4);
-    assert.equal(tracks.find((t) => t['id'] === 'adults')?.['packCount'], 10);
+    assert.equal(tracks.find((t) => t['id'] === 'adults')?.['packCount'], 12);
     assert.equal(tracks.find((t) => t['id'] === 'kids')?.['packCount'], 0);
-    assert.equal(tracks.find((t) => t['id'] === 'teens')?.['packCount'], 8);
-    assert.equal(tracks.find((t) => t['id'] === 'seniors')?.['packCount'], 6);
+    assert.equal(tracks.find((t) => t['id'] === 'teens')?.['packCount'], 9);
+    assert.equal(tracks.find((t) => t['id'] === 'seniors')?.['packCount'], 7);
     const packs = asJson((await h.call('GET', '/api/v1/tracks/teens/packs')).body)['packs'] as Json[];
     assert.ok(packs.some((p) => p['id'] === 'teens-pressure-and-peers'));
     assert.equal((await h.call('GET', '/api/v1/tracks/nope/packs')).status, 404);
@@ -204,10 +204,10 @@ describe('every shipped pack', () => {
         const detail = asJson((await h.call('GET', `/api/v1/packs/${id}`)).body);
         const view = asJson(detail['patientView']);
         const responses: Json = {};
-        if (view['format'] === 'checkin') {
-          for (const item of view['items'] as Json[]) responses[String(item['id'])] = 1;
-        } else {
+        if (view['format'] === 'scenario') {
           for (const sc of view['scenarios'] as Json[]) responses[String(sc['id'])] = String(((sc['options'] as Json[])[0] as Json)['id']);
+        } else {
+          for (const item of view['items'] as Json[]) responses[String(item['id'])] = 1;
         }
         const created = asJson((await h.call('POST', '/api/v1/sessions', { body: { packId: id } })).body);
         const sid = String(created['id']);
@@ -219,6 +219,6 @@ describe('every shipped pack', () => {
         total += 1;
       }
     }
-    assert.equal(total, 24);
+    assert.equal(total, 28);
   });
 });

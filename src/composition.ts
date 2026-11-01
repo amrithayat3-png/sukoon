@@ -14,10 +14,12 @@ import { createCatalogPillar } from './modules/catalog/index.js';
 import { FileCatalogRepository } from './modules/catalog/repository.js';
 import { CatalogService } from './modules/catalog/service.js';
 import { createHealthPillar } from './modules/health/index.js';
-import { CheckinScoring, ScenarioScoring, ScoringEngine } from './modules/scoring/index.js';
+import { CheckinScoring, MeasureScoring, ScenarioScoring, ScoringEngine } from './modules/scoring/index.js';
 import { FileSessionRepository } from './modules/sessions/file-repository.js';
 import { createSessionsPillar } from './modules/sessions/index.js';
-import { AccountService, MemoryKv, RedisKv, createAccountsPillar } from './modules/accounts/index.js';
+import { AccountService, MemoryKv, RedisKv, UsageMeter, createAccountsPillar } from './modules/accounts/index.js';
+import { FeedbackService, createFeedbackPillar } from './modules/feedback/index.js';
+import { ResourceService, createResourcesPillar } from './modules/resources/index.js';
 import { EncryptedSessionRepository } from './modules/sessions/encrypted-repository.js';
 import { RedisRestSessionRepository } from './modules/sessions/redis-repository.js';
 import { MemorySessionRepository } from './modules/sessions/memory-repository.js';
@@ -60,8 +62,9 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
   const events = new EventBus((event, error) => log.error({ event, err: error }, 'Event handler failed'));
   attachAuditLog(events, log);
 
-  const catalog = new CatalogService(await FileCatalogRepository.load(config.contentDir));
-  const scoring = new ScoringEngine().register(new CheckinScoring()).register(new ScenarioScoring());
+  const catalog = new CatalogService(await FileCatalogRepository.load(config.contentDir), config.onlyReviewedPacks);
+  const resources = await ResourceService.load(config.contentDir);
+  const scoring = new ScoringEngine().register(new CheckinScoring()).register(new MeasureScoring()).register(new ScenarioScoring());
 
   const baseRepo: SessionRepository =
     options.sessionRepo ??
@@ -72,12 +75,15 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
         : new MemorySessionRepository());
   const repo: SessionRepository = config.encryptionKey ? new EncryptedSessionRepository(baseRepo, config.encryptionKey) : baseRepo;
 
-  const accounts = config.saasMode && config.authSecret
-    ? new AccountService(
-        config.storeDriver === 'redis' && config.redisUrl && config.redisToken ? new RedisKv({ url: config.redisUrl, token: config.redisToken }) : new MemoryKv(),
-        config.authSecret, config.adminKey, clock)
-    : undefined;
-  const sessions = new SessionService({ repo, catalog, scoring, events, clock, ttlMs: config.sessionTtlMs, createLimitPerHour: config.createLimitPerHour, ...(accounts ? { gate: accounts.gate } : {}) });
+  const kv = config.storeDriver === 'redis' && config.redisUrl && config.redisToken ? new RedisKv({ url: config.redisUrl, token: config.redisToken }) : new MemoryKv();
+  const accounts = config.saasMode && config.authSecret ? new AccountService(kv, config.authSecret, config.adminKey, clock) : undefined;
+  const usage = accounts ? new UsageMeter(kv, clock, catalog.packIds()) : undefined;
+  const feedback = new FeedbackService(kv, clock);
+  const sessions = new SessionService({
+    repo, catalog, scoring, events, clock, resources, ttlMs: config.sessionTtlMs, createLimitPerHour: config.createLimitPerHour,
+    ...(accounts ? { gate: accounts.gate } : {}),
+    ...(usage ? { usage } : {}),
+  });
   const keyRing = new KeyRing(config.clinicianKeys);
   const ai = createAiRegistry({
     enabled: config.aiEnabled,
@@ -91,6 +97,7 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
       appVersion: config.appVersion,
       openAccess: config.openAccess,
       saas: config.saasMode,
+      reviewedOnly: config.onlyReviewedPacks,
       checks: [
         {
           name: 'catalog',
@@ -105,7 +112,9 @@ export async function composePlatform(config: Config, options: ComposeOptions = 
     createCatalogPillar(catalog),
     createSessionsPillar(sessions),
     createAiPillar(ai),
-    ...(accounts ? [createAccountsPillar(accounts)] : []),
+    createResourcesPillar(resources),
+    createFeedbackPillar(feedback, Boolean(accounts)),
+    ...(accounts && usage ? [createAccountsPillar(accounts, usage)] : []),
   ];
 
   const routes = pillars.flatMap((pillar) => pillar.routes());

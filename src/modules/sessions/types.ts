@@ -18,8 +18,26 @@ export interface Session {
   updatedAt: string;
   completedAt?: string;
   expiresAt: string;
+  /** Optional extras added around the activity. All are erased with the session. */
+  extras?: SessionExtras;
   /** Encrypted payload (responses and alias) when at-rest encryption is on. */
   sealed?: string;
+}
+
+export interface SessionExtras {
+  /** Private clinician notes. */
+  notes?: string;
+  /** Homework card ids chosen by the clinician. */
+  homework?: string[];
+  /** Inner weather before and after, from a fixed list. */
+  moodStart?: string;
+  moodEnd?: string;
+  /** One tap "what I noticed" choice, from a fixed list. */
+  reflection?: string;
+  /** Body areas the person tapped, from a fixed list. */
+  bodyMap?: string[];
+  /** When the consent screen was accepted. */
+  consentAt?: string;
 }
 
 export interface SessionView {
@@ -33,6 +51,7 @@ export interface SessionView {
   /** Saved answers, so a refreshed page can resume where it stopped. */
   responses: Responses;
   alias?: string;
+  consentAt?: string;
 }
 
 /** Port: where sessions live. Memory and file adapters ship; a Postgres adapter plugs in here. */

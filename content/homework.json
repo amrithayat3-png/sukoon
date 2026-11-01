@@ -1,0 +1,115 @@
+{
+  "status": "draft",
+  "cards": [
+    {
+      "id": "slow-breathing",
+      "title": "Slow breathing",
+      "minutes": 5,
+      "why": "A slow out-breath helps the body settle when it feels wound up.",
+      "steps": [
+        "Sit comfortably and let your shoulders drop.",
+        "Breathe in gently through your nose for a count of four.",
+        "Breathe out slowly through your mouth for a count of six.",
+        "Repeat for about five rounds, then notice how your body feels."
+      ],
+      "tip": "Try it at the same time each day, such as after brushing your teeth."
+    },
+    {
+      "id": "five-senses",
+      "title": "Five senses grounding",
+      "minutes": 5,
+      "why": "Noticing the room around you brings attention back to the present moment.",
+      "steps": [
+        "Name 5 things you can see.",
+        "Name 4 things you can touch or feel.",
+        "Name 3 things you can hear.",
+        "Name 2 things you can smell, and 1 thing you can taste.",
+        "Take one slow breath and look around once more."
+      ]
+    },
+    {
+      "id": "worry-time",
+      "title": "Worry time",
+      "minutes": 10,
+      "why": "Giving worries a set time can stop them from following you all day.",
+      "steps": [
+        "Pick a 10 minute slot each day and keep it the same.",
+        "When a worry shows up earlier, jot a few words and tell yourself 'later, at worry time'.",
+        "At worry time, read the list and ask which worries you can act on.",
+        "Pick one small action for a worry you can act on, and let the rest go for today."
+      ]
+    },
+    {
+      "id": "thought-check",
+      "title": "Thought check",
+      "minutes": 10,
+      "why": "Looking at a hard thought from a few sides can make it feel less fixed.",
+      "steps": [
+        "Write the thought that is bothering you in one sentence.",
+        "Ask: what is the evidence for it, and what is the evidence against it?",
+        "Ask: what would I say to a close friend who had this thought?",
+        "Write a kinder, more balanced version of the thought."
+      ]
+    },
+    {
+      "id": "one-small-step",
+      "title": "One small step",
+      "minutes": 10,
+      "why": "Starting with a very small task makes it easier to get moving when energy is low.",
+      "steps": [
+        "Choose one task you have been putting off.",
+        "Shrink it until it takes five minutes or less.",
+        "Set a timer for five minutes and start.",
+        "When the timer ends, you may stop or carry on. Either is fine.",
+        "Notice how it felt to begin."
+      ]
+    },
+    {
+      "id": "sleep-wind-down",
+      "title": "Evening wind-down",
+      "minutes": 30,
+      "why": "A steady, calm routine before bed helps the mind and body get ready for sleep.",
+      "steps": [
+        "Pick a regular time to start winding down each evening.",
+        "Put screens away about thirty minutes before bed.",
+        "Dim the lights and do something quiet, such as reading or gentle stretching.",
+        "Go to bed and get up at about the same times each day."
+      ],
+      "tip": "If your mind is busy, write tomorrow's tasks on paper first."
+    },
+    {
+      "id": "three-good-things",
+      "title": "Three good things",
+      "minutes": 5,
+      "why": "Noticing small good moments helps balance the mind's habit of focusing on problems.",
+      "steps": [
+        "Before bed, write down three things that went okay today. Small things count.",
+        "Next to each, write why it happened or what part you played.",
+        "Read them once, then put the page away."
+      ]
+    },
+    {
+      "id": "reach-out",
+      "title": "Reach out",
+      "minutes": 10,
+      "why": "Small moments of connection can ease loneliness and stress.",
+      "steps": [
+        "Think of one person you feel at ease with.",
+        "Send a short message or call, even just to say hello.",
+        "If it feels hard, plan a time and place to do it this week."
+      ]
+    },
+    {
+      "id": "gentle-movement",
+      "title": "Gentle movement",
+      "minutes": 15,
+      "why": "Light movement can lift energy and mood without needing a full workout.",
+      "steps": [
+        "Choose a gentle activity you can do today, such as a short walk or stretching.",
+        "Start with ten minutes and go at an easy pace.",
+        "Notice how your body and mood feel afterwards."
+      ],
+      "tip": "Check with your doctor first if you have a health condition or injury."
+    }
+  ]
+}

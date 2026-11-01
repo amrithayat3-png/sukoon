@@ -181,6 +181,40 @@ export class AccountService {
     return { token: this.issueToken(user), user: publicUser(user) };
   }
 
+  /** People in one institute, for the admin page. Never includes password data. */
+  async listUsers(orgId: string): Promise<PublicUser[]> {
+    await this.getOrg(orgId);
+    const users: PublicUser[] = [];
+    for (const id of await this.userIds(orgId)) {
+      const user = await this.getJson<User>(`user:${id}`);
+      if (user) users.push(publicUser(user));
+    }
+    return users;
+  }
+
+  /** The Sukoon team sets a one-time password and tells the person. Shown once, never stored in plain text. */
+  async resetPassword(userId: string): Promise<{ user: PublicUser; temporaryPassword: string }> {
+    const user = await this.getJson<User>(`user:${userId}`);
+    if (!user) throw new NotFoundError('Account not found.');
+    const alphabet = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const bytes = randomBytes(12);
+    const temporaryPassword = Array.from(bytes, (b) => alphabet[b % alphabet.length]).join('');
+    user.passwordHash = await this.hash(temporaryPassword);
+    await this.putJson(`user:${user.id}`, user);
+    await this.kv.del(`login-attempts:${user.email}`);
+    return { user: publicUser(user), temporaryPassword };
+  }
+
+  async changePassword(principal: Principal, input: { current: string; next: string }): Promise<{ ok: true }> {
+    const user = await this.getJson<User>(`user:${principal.keyId}`);
+    if (!user) throw new UnauthorizedError();
+    if ((await this.kv.incr(`pw-attempts:${user.id}`, 900)) > 10) throw new TooManyRequestsError('Too many attempts. Please wait 15 minutes.');
+    if (!(await this.check(input.current, user.passwordHash))) throw new UnauthorizedError('Your current password is not correct.');
+    user.passwordHash = await this.hash(input.next);
+    await this.putJson(`user:${user.id}`, user);
+    return { ok: true };
+  }
+
   async me(principal: Principal): Promise<{ user: PublicUser; org: PublicOrg }> {
     const user = await this.getJson<User>(`user:${principal.keyId}`);
     if (!user) throw new UnauthorizedError();

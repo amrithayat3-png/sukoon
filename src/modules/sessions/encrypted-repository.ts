@@ -2,7 +2,7 @@ import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:
 import type { Session, SessionRepository } from './types.js';
 
 /**
- * Decorator that seals the sensitive parts of a session (answers and alias) with
+ * Decorator that seals the sensitive parts of a session (answers, alias, notes and extras) with
  * AES-256-GCM before they reach the real store. Anyone who can read the database
  * but not SESSION_ENCRYPTION_KEY sees only ids, pack names and timestamps.
  */
@@ -18,10 +18,10 @@ export class EncryptedSessionRepository implements SessionRepository {
   }
 
   private seal(session: Session): Session {
-    const { responses, alias, ...rest } = session;
+    const { responses, alias, extras, ...rest } = session;
     const iv = randomBytes(12);
     const cipher = createCipheriv('aes-256-gcm', this.key, iv);
-    const data = Buffer.concat([cipher.update(JSON.stringify({ responses, alias }), 'utf8'), cipher.final()]);
+    const data = Buffer.concat([cipher.update(JSON.stringify({ responses, alias, extras }), 'utf8'), cipher.final()]);
     const sealed = Buffer.concat([iv, cipher.getAuthTag(), data]).toString('base64');
     return { ...rest, responses: {}, sealed };
   }
@@ -32,10 +32,11 @@ export class EncryptedSessionRepository implements SessionRepository {
     const decipher = createDecipheriv('aes-256-gcm', this.key, raw.subarray(0, 12));
     decipher.setAuthTag(raw.subarray(12, 28));
     const text = Buffer.concat([decipher.update(raw.subarray(28)), decipher.final()]).toString('utf8');
-    const { responses, alias } = JSON.parse(text) as Pick<Session, 'responses' | 'alias'>;
+    const { responses, alias, extras } = JSON.parse(text) as Pick<Session, 'responses' | 'alias' | 'extras'>;
     const { sealed: _sealed, ...rest } = session;
     const opened: Session = { ...rest, responses };
     if (alias) opened.alias = alias;
+    if (extras) opened.extras = extras;
     return opened;
   }
 

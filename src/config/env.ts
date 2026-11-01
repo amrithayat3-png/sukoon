@@ -32,6 +32,7 @@ const EnvSchema = z.object({
   ADMIN_KEY: z.string().min(16, 'ADMIN_KEY must be at least 16 characters.').optional(),
   SESSION_ENCRYPTION_KEY: z.string().min(32, 'SESSION_ENCRYPTION_KEY must be at least 32 characters.').optional(),
   SESSION_CREATE_LIMIT_PER_HOUR: z.coerce.number().int().min(0).default(120),
+  ONLY_REVIEWED_PACKS: booleanString.default('false'),
 });
 
 export interface Config {
@@ -52,6 +53,8 @@ export interface Config {
   readonly adminKey: string | undefined;
   readonly encryptionKey: string | undefined;
   readonly createLimitPerHour: number;
+  /** When true, packs still marked draft are hidden and cannot be started. */
+  readonly onlyReviewedPacks: boolean;
   readonly dataDir: string;
   readonly contentDir: string;
   readonly webDir: string;
@@ -132,6 +135,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     adminKey: e.ADMIN_KEY,
     encryptionKey: e.SESSION_ENCRYPTION_KEY,
     createLimitPerHour: e.SESSION_CREATE_LIMIT_PER_HOUR,
+    onlyReviewedPacks: e.ONLY_REVIEWED_PACKS,
   };
 }
 

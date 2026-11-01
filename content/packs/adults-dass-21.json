@@ -1,0 +1,275 @@
+{
+  "id": "adults-dass-21",
+  "version": "0.1.0",
+  "track": "adults",
+  "audience": [
+    "general"
+  ],
+  "title": "DASS-21: Depression, Anxiety and Stress",
+  "summary": "A well known 21-question check on low mood, anxiety and stress over the past week, scored the official way.",
+  "status": "draft",
+  "estimatedMinutes": 6,
+  "references": [
+    "lovibond-1995-dass"
+  ],
+  "clinicianNotes": "Published instrument (DASS-21), wording as published; the scoring sheet states it is free to use. Each subscale has 7 items; sums are doubled and compared with the published cut-offs (Normal, Mild, Moderate, Severe, Extremely severe). It is dimensional and has no diagnostic implications. It should not replace a face to face clinical interview. Item 21 (life was meaningless) is listed under 'Items to look at together' when answered 3; this is a choice for the reviewing psychologist and can be changed in the pack file. Set for Adults only; whether to offer it to Teens is for the psychologist to decide. No local norms are available.",
+  "format": "measure",
+  "prompt": "Please read each statement and choose how much it applied to you. There are no right or wrong answers. Do not spend too much time on any statement.",
+  "timeframe": "Over the past week",
+  "scale": [
+    {
+      "value": 0,
+      "label": "Did not apply to me at all"
+    },
+    {
+      "value": 1,
+      "label": "Applied to me to some degree, or some of the time"
+    },
+    {
+      "value": 2,
+      "label": "Applied to me to a considerable degree or a good part of the time"
+    },
+    {
+      "value": 3,
+      "label": "Applied to me very much or most of the time"
+    }
+  ],
+  "source": {
+    "licence": "free-with-citation",
+    "attribution": "DASS-21, Lovibond, S. H. & Lovibond, P. F. (1995). Manual for the Depression Anxiety & Stress Scales (2nd ed.). Sydney: Psychology Foundation.",
+    "wording": "as-published"
+  },
+  "subscales": [
+    {
+      "id": "depression",
+      "label": "Depression",
+      "description": "Low mood, hopelessness, loss of interest and energy.",
+      "polarity": "risk",
+      "multiplier": 2,
+      "cutoffs": [
+        {
+          "from": 0,
+          "label": "Normal",
+          "band": "ok"
+        },
+        {
+          "from": 10,
+          "label": "Mild",
+          "band": "watch"
+        },
+        {
+          "from": 14,
+          "label": "Moderate",
+          "band": "watch"
+        },
+        {
+          "from": 21,
+          "label": "Severe",
+          "band": "explore"
+        },
+        {
+          "from": 28,
+          "label": "Extremely severe",
+          "band": "explore"
+        }
+      ]
+    },
+    {
+      "id": "anxiety",
+      "label": "Anxiety",
+      "description": "Physical arousal, panic and fearful feelings.",
+      "polarity": "risk",
+      "multiplier": 2,
+      "cutoffs": [
+        {
+          "from": 0,
+          "label": "Normal",
+          "band": "ok"
+        },
+        {
+          "from": 8,
+          "label": "Mild",
+          "band": "watch"
+        },
+        {
+          "from": 10,
+          "label": "Moderate",
+          "band": "watch"
+        },
+        {
+          "from": 15,
+          "label": "Severe",
+          "band": "explore"
+        },
+        {
+          "from": 20,
+          "label": "Extremely severe",
+          "band": "explore"
+        }
+      ]
+    },
+    {
+      "id": "stress",
+      "label": "Stress",
+      "description": "Difficulty relaxing, nervous tension and irritability.",
+      "polarity": "risk",
+      "multiplier": 2,
+      "cutoffs": [
+        {
+          "from": 0,
+          "label": "Normal",
+          "band": "ok"
+        },
+        {
+          "from": 15,
+          "label": "Mild",
+          "band": "watch"
+        },
+        {
+          "from": 19,
+          "label": "Moderate",
+          "band": "watch"
+        },
+        {
+          "from": 26,
+          "label": "Severe",
+          "band": "explore"
+        },
+        {
+          "from": 34,
+          "label": "Extremely severe",
+          "band": "explore"
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "dass-01",
+      "subscale": "stress",
+      "text": "I found it hard to wind down",
+      "reverse": false
+    },
+    {
+      "id": "dass-02",
+      "subscale": "anxiety",
+      "text": "I was aware of dryness of my mouth",
+      "reverse": false
+    },
+    {
+      "id": "dass-03",
+      "subscale": "depression",
+      "text": "I couldn't seem to experience any positive feeling at all",
+      "reverse": false
+    },
+    {
+      "id": "dass-04",
+      "subscale": "anxiety",
+      "text": "I experienced breathing difficulty (e.g. excessively rapid breathing, breathlessness in the absence of physical exertion)",
+      "reverse": false
+    },
+    {
+      "id": "dass-05",
+      "subscale": "depression",
+      "text": "I found it difficult to work up the initiative to do things",
+      "reverse": false
+    },
+    {
+      "id": "dass-06",
+      "subscale": "stress",
+      "text": "I tended to over-react to situations",
+      "reverse": false
+    },
+    {
+      "id": "dass-07",
+      "subscale": "anxiety",
+      "text": "I experienced trembling (e.g. in the hands)",
+      "reverse": false
+    },
+    {
+      "id": "dass-08",
+      "subscale": "stress",
+      "text": "I felt that I was using a lot of nervous energy",
+      "reverse": false
+    },
+    {
+      "id": "dass-09",
+      "subscale": "anxiety",
+      "text": "I was worried about situations in which I might panic and make a fool of myself",
+      "reverse": false
+    },
+    {
+      "id": "dass-10",
+      "subscale": "depression",
+      "text": "I felt that I had nothing to look forward to",
+      "reverse": false
+    },
+    {
+      "id": "dass-11",
+      "subscale": "stress",
+      "text": "I found myself getting agitated",
+      "reverse": false
+    },
+    {
+      "id": "dass-12",
+      "subscale": "stress",
+      "text": "I found it difficult to relax",
+      "reverse": false
+    },
+    {
+      "id": "dass-13",
+      "subscale": "depression",
+      "text": "I felt down-hearted and blue",
+      "reverse": false
+    },
+    {
+      "id": "dass-14",
+      "subscale": "stress",
+      "text": "I was intolerant of anything that kept me from getting on with what I was doing",
+      "reverse": false
+    },
+    {
+      "id": "dass-15",
+      "subscale": "anxiety",
+      "text": "I felt I was close to panic",
+      "reverse": false
+    },
+    {
+      "id": "dass-16",
+      "subscale": "depression",
+      "text": "I was unable to become enthusiastic about anything",
+      "reverse": false
+    },
+    {
+      "id": "dass-17",
+      "subscale": "depression",
+      "text": "I felt I wasn't worth much as a person",
+      "reverse": false
+    },
+    {
+      "id": "dass-18",
+      "subscale": "stress",
+      "text": "I felt that I was rather touchy",
+      "reverse": false
+    },
+    {
+      "id": "dass-19",
+      "subscale": "anxiety",
+      "text": "I was aware of the action of my heart in the absence of physical exertion (e.g. sense of heart rate increase, heart missing a beat)",
+      "reverse": false
+    },
+    {
+      "id": "dass-20",
+      "subscale": "anxiety",
+      "text": "I felt scared without any good reason",
+      "reverse": false
+    },
+    {
+      "id": "dass-21",
+      "subscale": "depression",
+      "text": "I felt that life was meaningless",
+      "reverse": false,
+      "highlightAt": 3
+    }
+  ]
+}

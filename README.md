@@ -69,3 +69,11 @@ Set `SAAS_MODE=true`, `AUTH_SECRET` (32+ chars) and `ADMIN_KEY` (16+ chars), kee
 - Each institute has a plan (free pilot or paid), a monthly session cap, an optional end date, and can be paused. These are enforced when a session starts.
 - Sessions belong to the psychologist who started them. Other psychologists and other institutes cannot open them.
 - Accounts are stored in the same Redis database (no expiry). For long-term growth, plan a move to Postgres behind the `KvStore` port.
+
+## v8 additions
+- Published questionnaires: DASS-21 (adults), PWB-18 (adults, older adults), SAS-SV (teens), scored with their published rules.
+- Printable session report, private session notes, homework exercise cards (content/homework.json).
+- Custom sets of 2 to 4 activities, calming tools, pause button, body map, reflection cards, simple mode.
+- Consent screen, privacy and terms pages (fill the placeholders in web/js/legal.js), Help now page (add helplines in content/crisis.json).
+- Usage counts per institute, feedback button, admin password reset (SaaS mode).
+- ONLY_REVIEWED_PACKS=true hides anything not marked reviewed.

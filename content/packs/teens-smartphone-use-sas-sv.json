@@ -1,0 +1,131 @@
+{
+  "id": "teens-smartphone-use-sas-sv",
+  "version": "0.1.0",
+  "track": "teens",
+  "audience": [
+    "general"
+  ],
+  "title": "Smartphone Use (SAS-SV)",
+  "summary": "Ten statements about how phone use affects daily life, a short screening scale for teenagers.",
+  "status": "draft",
+  "estimatedMinutes": 3,
+  "references": [
+    "kwon-2013-sas-sv"
+  ],
+  "clinicianNotes": "Smartphone Addiction Scale, Short Version (Kwon et al., 2013), open access under CC BY; credit is required and shown on screen. 10 items, 6-point agree scale, total 10 to 60. The paper reports reference cut-offs of 31 (boys) and 33 (girls) from a Korean school sample and says the scale screens for risk and does not diagnose. Both reference values are shown; choose the one you consider appropriate. Intermediate answer labels follow the common English wording and should be confirmed. No local norms are available.",
+  "format": "measure",
+  "prompt": "Please choose how much you agree with each statement.",
+  "scale": [
+    {
+      "value": 1,
+      "label": "Strongly disagree"
+    },
+    {
+      "value": 2,
+      "label": "Disagree"
+    },
+    {
+      "value": 3,
+      "label": "Weakly disagree"
+    },
+    {
+      "value": 4,
+      "label": "Weakly agree"
+    },
+    {
+      "value": 5,
+      "label": "Agree"
+    },
+    {
+      "value": 6,
+      "label": "Strongly agree"
+    }
+  ],
+  "source": {
+    "licence": "open-access-cc-by",
+    "attribution": "Smartphone Addiction Scale, Short Version (SAS-SV). Kwon, M., Kim, D.-J., Cho, H., & Yang, S. (2013). PLoS ONE 8(12): e83558. Licensed CC BY.",
+    "wording": "as-published"
+  },
+  "subscales": [
+    {
+      "id": "total",
+      "label": "Smartphone use total",
+      "description": "Overall score across the 10 statements; higher means more difficulty.",
+      "polarity": "risk",
+      "multiplier": 1,
+      "referenceLines": [
+        {
+          "label": "Reference cut-off reported for boys (Kwon et al., 2013)",
+          "value": 31
+        },
+        {
+          "label": "Reference cut-off reported for girls (Kwon et al., 2013)",
+          "value": 33
+        }
+      ],
+      "guidance": "Compare the total with the reference values reported in the source paper. They come from one Korean sample and are for screening, not diagnosis. Ask about which apps, when, and what it replaces."
+    }
+  ],
+  "items": [
+    {
+      "id": "sas-01",
+      "subscale": "total",
+      "text": "Missing planned work due to smartphone use",
+      "reverse": false
+    },
+    {
+      "id": "sas-02",
+      "subscale": "total",
+      "text": "Having a hard time concentrating in class, while doing assignments, or while working due to smartphone use",
+      "reverse": false
+    },
+    {
+      "id": "sas-03",
+      "subscale": "total",
+      "text": "Feeling pain in the wrists or at the back of the neck while using a smartphone",
+      "reverse": false
+    },
+    {
+      "id": "sas-04",
+      "subscale": "total",
+      "text": "Won't be able to stand not having a smartphone",
+      "reverse": false
+    },
+    {
+      "id": "sas-05",
+      "subscale": "total",
+      "text": "Feeling impatient and fretful when I am not holding my smartphone",
+      "reverse": false
+    },
+    {
+      "id": "sas-06",
+      "subscale": "total",
+      "text": "Having my smartphone in my mind even when I am not using it",
+      "reverse": false
+    },
+    {
+      "id": "sas-07",
+      "subscale": "total",
+      "text": "I will never give up using my smartphone even when my daily life is already greatly affected by it.",
+      "reverse": false
+    },
+    {
+      "id": "sas-08",
+      "subscale": "total",
+      "text": "Constantly checking my smartphone so as not to miss conversations between other people on Twitter or Facebook",
+      "reverse": false
+    },
+    {
+      "id": "sas-09",
+      "subscale": "total",
+      "text": "Using my smartphone longer than I had intended",
+      "reverse": false
+    },
+    {
+      "id": "sas-10",
+      "subscale": "total",
+      "text": "The people around me tell me that I use my smartphone too much.",
+      "reverse": false
+    }
+  ]
+}

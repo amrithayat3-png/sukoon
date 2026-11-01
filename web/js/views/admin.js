@@ -28,10 +28,14 @@ function keyForm(root) {
 async function refresh(root) {
   try {
     const { orgs } = await api.adminOrgs(adminKey);
+    const usage = await api.adminUsage(adminKey).catch(() => ({ orgs: [] }));
+    const totals = new Map(usage.orgs.map((u) => [u.id, u.totals]));
+    const feedback = await api.adminFeedback(adminKey).catch(() => null);
     mount(root,
       h('h1', null, 'Institutes'),
       createForm(root),
-      h('div', { class: 'stack', style: { marginTop: '18px' } }, orgs.length ? orgs.map((o) => orgCard(root, o)) : h('p', { class: 'muted' }, 'No institutes yet. Create the first one above.')));
+      h('div', { class: 'stack', style: { marginTop: '18px' } }, orgs.length ? orgs.map((o) => orgCard(root, o, totals.get(o.id))) : h('p', { class: 'muted' }, 'No institutes yet. Create the first one above.')),
+      feedback ? feedbackCard(feedback.feedback) : null);
   } catch (err) {
     if (err.status === 401) { adminKey = ''; keyForm(root); return; }
     mount(root, errorBox(err.message));
@@ -59,8 +63,9 @@ function createForm(root) {
     slot, h('div', null, h('button', { class: 'btn', type: 'submit' }, 'Create institute')));
 }
 
-function orgCard(root, o) {
+function orgCard(root, o, totals) {
   const slot = h('div');
+  const people = h('div', { class: 'stack' });
   const act = (patch) => async () => {
     slot.replaceChildren();
     try { await api.adminUpdate(adminKey, o.id, patch); refresh(root); } catch (err) { slot.append(errorBox(err.message)); }
@@ -81,5 +86,29 @@ function orgCard(root, o) {
       limit,
       h('button', { class: 'btn small ghost', type: 'button', onClick: () => act({ monthlySessionLimit: Number(limit.value) })() }, 'Save limit'),
       o.plan === 'free-pilot' ? h('button', { class: 'btn small ghost', type: 'button', onClick: act({ plan: 'paid' }) }, 'Mark as paid') : null),
-    slot);
+    totals ? h('p', { class: 'muted small', style: { margin: 0 } }, `Last 30 days: ${totals.created} sessions started, ${totals.completed} finished`) : null,
+    h('div', null, h('button', { class: 'btn small ghost', type: 'button', onClick: () => showUsers(o, people) }, 'Psychologists')),
+    people, slot);
+}
+
+async function showUsers(o, box) {
+  box.replaceChildren();
+  try {
+    const { users } = await api.adminUsers(adminKey, o.id);
+    box.append(users.length ? users.map((u) => {
+      const out = h('span', { class: 'small', role: 'status' });
+      return h('div', { class: 'row between' },
+        h('span', null, `${u.name} (${u.email})`),
+        h('span', { class: 'row' }, out, h('button', { class: 'btn small ghost', type: 'button', onClick: async () => {
+          if (!confirm(`Set a new temporary password for ${u.name}?`)) return;
+          try { const r = await api.adminReset(adminKey, u.id); out.replaceChildren('Temporary password, shown once: ', h('strong', { class: 'code' }, r.temporaryPassword)); }
+          catch (err) { out.textContent = err.message; }
+        } }, 'Reset password')));
+    }) : h('p', { class: 'muted small' }, 'No psychologists have joined yet.'));
+  } catch (err) { box.append(errorBox(err.message)); }
+}
+
+function feedbackCard(list) {
+  return h('section', { class: 'card', style: { marginTop: '18px' } }, h('h2', null, 'Feedback'),
+    list.length ? h('ul', null, list.map((f) => h('li', null, `${f.at.slice(0, 10)} · ${f.rating}/5 · ${f.page} · ${f.text}`))) : h('p', { class: 'muted' }, 'Nothing yet.'));
 }

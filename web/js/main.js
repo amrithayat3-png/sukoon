@@ -11,6 +11,13 @@ import { resultsView } from './views/results.js';
 import { referencesView } from './views/references.js';
 import { aboutView } from './views/about.js';
 import { adminView } from './views/admin.js';
+import { setView } from './views/set.js';
+import { helpView } from './views/help.js';
+import { toolsView } from './views/tools.js';
+import { usageView } from './views/usage.js';
+import { accountView } from './views/account.js';
+import { privacyView, termsView } from './legal.js';
+import { openFeedback } from './extras.js';
 
 const root = document.getElementById('main');
 document.body.prepend(h('div', { class: 'aurora', 'aria-hidden': 'true' }, h('i', { class: 'a1' }), h('i', { class: 'a2' }), h('i', { class: 'a3' })));
@@ -29,10 +36,12 @@ function reveal() {
   });
 }
 const nav = document.getElementById('topnav');
+const fab = h('button', { class: 'fab noprint', type: 'button', onClick: () => openFeedback(location.hash.replace(/^#/, '') || '/') }, 'Feedback');
+document.body.append(fab);
 
 document.getElementById('brand').append(logo(38), h('span', { class: 'wordmark' }, 'Sukoon'));
 document.getElementById('foot').append(
-  'Sukoon, a calmer conversation. ', h('a', { href: '#/about' }, 'About this tool'), ' | ', h('a', { href: '#/admin' }, 'Institute admin'));
+  'Sukoon, a calmer conversation. ', h('a', { href: '#/about' }, 'About this tool'), ' | ', h('a', { href: '#/privacy' }, 'Privacy'), ' | ', h('a', { href: '#/terms' }, 'Terms'), ' | ', h('a', { href: '#/help' }, 'Help now'), ' | ', h('a', { href: '#/admin' }, 'Institute admin'));
 
 function renderNav() {
   const p = prefs();
@@ -42,7 +51,11 @@ function renderNav() {
       p.large ? 'Smaller text' : 'Larger text'),
     h('button', { class: 'btn ghost small', type: 'button', onClick: () => { p.setTheme(isDark() ? 'light' : 'dark'); renderNav(); } },
       isDark() ? 'Light mode' : 'Dark mode'),
+    h('button', { class: 'btn ghost small', type: 'button', 'aria-pressed': String(p.simple), onClick: () => { p.setSimple(!p.simple); renderNav(); } }, p.simple ? 'Normal view' : 'Simple mode'),
+    h('a', { class: 'btn ghost small', href: '#/help' }, 'Help now'),
+    h('a', { class: 'btn ghost small', href: '#/tools' }, 'Tools'),
     h('a', { class: 'btn ghost small', href: '#/references' }, 'References'),
+    keyed && state.saas ? h('a', { class: 'btn ghost small', href: '#/account' }, 'Account') : null,
     keyed ? h('button', { class: 'btn ghost small', type: 'button', onClick: () => { keyStore.clear(); location.hash = '#/login'; } }, 'Sign out') : null,
   ].filter(Boolean));
 }
@@ -56,6 +69,13 @@ const routes = [
   [/^\/done\/([0-9a-f-]{36})$/, handoffView],
   [/^\/results\/([0-9a-f-]{36})$/, resultsView],
   [/^\/references$/, referencesView],
+  [/^\/set$/, setView],
+  [/^\/usage$/, usageView],
+  [/^\/tools$/, toolsView, false],
+  [/^\/help$/, helpView, false],
+  [/^\/privacy$/, privacyView, false],
+  [/^\/terms$/, termsView, false],
+  [/^\/account$/, accountView],
   [/^\/about$/, aboutView, false],
   [/^\/admin$/, adminView, false],
 ];
@@ -64,6 +84,9 @@ function route() {
   const path = location.hash.replace(/^#/, '') || '/';
   renderNav();
   root.className = '';
+  window.speechSynthesis?.cancel();
+  const pm = path.startsWith('/run/') || path.startsWith('/done/') || path === '/login';
+  fab.hidden = pm || (!state.open && !keyStore.get());
   document.body.classList.toggle('patient-mode', path.startsWith('/run/') || path.startsWith('/done/'));
   for (const [pattern, view, needsKey = true] of routes) {
     const match = pattern.exec(path);

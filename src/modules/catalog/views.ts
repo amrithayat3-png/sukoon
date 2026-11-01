@@ -15,6 +15,15 @@ export type PatientPackView =
       items: Array<{ id: string; text: string }>;
     }
   | {
+      format: 'measure';
+      id: string;
+      title: string;
+      prompt: string;
+      timeframe?: string;
+      scale: Array<{ value: number; label: string }>;
+      items: Array<{ id: string; text: string }>;
+    }
+  | {
       format: 'scenario';
       id: string;
       title: string;
@@ -40,10 +49,12 @@ export interface PackSummary {
   itemCount: number;
   references: string[];
   clinicianNotes?: string;
+  /** Licence and credit line for published questionnaires. */
+  source?: { licence: string; attribution: string; wording: string };
 }
 
 export function itemCount(pack: Pack): number {
-  return pack.format === 'checkin' ? pack.items.length : pack.scenarios.length;
+  return pack.format === 'scenario' ? pack.scenarios.length : pack.items.length;
 }
 
 export function toSummary(pack: Pack): PackSummary {
@@ -61,6 +72,7 @@ export function toSummary(pack: Pack): PackSummary {
     references: [...pack.references],
   };
   if (pack.clinicianNotes) summary.clinicianNotes = pack.clinicianNotes;
+  if (pack.format === 'measure') summary.source = { ...pack.source };
   return summary;
 }
 
@@ -74,6 +86,18 @@ export function toPatientView(pack: Pack): PatientPackView {
       scale: pack.scale.map((s) => ({ value: s.value, label: s.label })),
       items: pack.items.map((i) => ({ id: i.id, text: i.text })),
     };
+  }
+  if (pack.format === 'measure') {
+    const view: Extract<PatientPackView, { format: 'measure' }> = {
+      format: 'measure',
+      id: pack.id,
+      title: pack.title,
+      prompt: pack.prompt,
+      scale: pack.scale.map((s) => ({ value: s.value, label: s.label })),
+      items: pack.items.map((i) => ({ id: i.id, text: i.text })),
+    };
+    if (pack.timeframe) view.timeframe = pack.timeframe;
+    return view;
   }
   return {
     format: 'scenario',

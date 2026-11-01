@@ -105,6 +105,8 @@ const PACK_ICON = {
   'seniors-loneliness': ['lonely', 'mint'], 'seniors-sleep-body': ['sleep', 'lavender'],
   'seniors-mood': ['mood', 'sky'], 'seniors-loss-change': ['seniors', 'pink'],
   'seniors-memory-worries': ['bulb', 'sun'], 'seniors-everyday-situations': ['everyday', 'teal'],
+  'adults-dass-21': ['stress', 'sky'], 'adults-wellbeing-ryff-18': ['smile', 'mint'], 'seniors-wellbeing-ryff-18': ['smile', 'mint'],
+  'teens-smartphone-use-sas-sv': ['phone', 'sky'],
 };
 const TRACK_ICON = { kids: ['kids', 'coral'], teens: ['teens', 'lavender'], adults: ['adults', 'teal'], seniors: ['seniors', 'sun'] };
 

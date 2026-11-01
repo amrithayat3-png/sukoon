@@ -13,6 +13,23 @@ export interface DomainResult {
   score: number;
   band: Band;
   guidance: string;
+  /** Published questionnaires only: the official score before conversion to 0 to 100. */
+  raw?: number;
+  rawMin?: number;
+  rawMax?: number;
+  /** Published level label, for example "Moderate". */
+  level?: string;
+  /** False when the questionnaire publishes no cut points, so the bar carries no colour meaning. */
+  banded?: boolean;
+  /** Reference values from the source paper, with whether the score reached each one. */
+  referenceLines?: Array<{ label: string; value: number; reached: boolean }>;
+}
+
+export interface Highlight {
+  itemId: string;
+  text: string;
+  answer: number;
+  answerLabel: string;
 }
 
 export interface Flag {
@@ -26,15 +43,20 @@ export interface ResultSummary {
   packVersion: string;
   format: Pack['format'];
   status: Pack['status'];
-  /** Always true until a validation study is recorded for the pack. */
-  provisional: true;
+  /** True for our own activities. Published questionnaires use their published scoring, so false. */
+  provisional: boolean;
   domains: DomainResult[];
   flags: Flag[];
+  /** Items the clinician may want to look at together. Not alerts. */
+  highlights?: Highlight[];
   disclaimer: string;
 }
 
 export const DISCLAIMER =
   'Provisional summary to support the judgement of a licensed professional. It is not a diagnosis and has not been clinically validated.';
+
+export const MEASURE_DISCLAIMER =
+  'Scores follow the published scoring of the source questionnaire. They are screening information to support a licensed professional, not a diagnosis, and no local norms are available yet. Treat them as hypotheses to check in conversation.';
 
 /** A scoring strategy owns the rules for one activity format. Add a format by registering a strategy. */
 export interface ScoringStrategy {

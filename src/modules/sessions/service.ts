@@ -1,11 +1,13 @@
-import { ConflictError, NotFoundError, TooManyRequestsError } from '../../core/errors.js';
+import { ConflictError, ForbiddenError, NotFoundError, TooManyRequestsError, ValidationError } from '../../core/errors.js';
 import type { EventBus } from '../../core/events.js';
 import { newCode, newId } from '../../core/ids.js';
 import type { Principal } from '../../core/route.js';
 import type { CatalogService } from '../catalog/service.js';
+import type { HomeworkCard, ResourceService } from '../resources/index.js';
 import type { ScoringEngine } from '../scoring/engine.js';
 import type { ResultSummary, Responses } from '../scoring/types.js';
-import type { Session, SessionRepository, SessionView } from './types.js';
+import { BODY_ZONES, labelOf, MOODS, REFLECTIONS } from './extras.js';
+import type { Session, SessionExtras, SessionRepository, SessionView } from './types.js';
 
 export interface SessionServiceDeps {
   repo: SessionRepository;
@@ -18,10 +20,36 @@ export interface SessionServiceDeps {
   createLimitPerHour?: number;
   /** SaaS hook: refuses creation when an institute is paused, expired or over its plan. */
   gate?: { beforeCreate(principal: Principal): Promise<void> };
+  /** Homework cards, used to validate and expand the clinician's choices. */
+  resources: ResourceService;
+  /** SaaS hook: counts sessions for usage reports. Failures never block a session. */
+  usage?: { created(principal: Principal, packId: string): Promise<void>; completed(principal: Principal, packId: string): Promise<void> };
+}
+
+export interface ExtrasInput {
+  notes?: string;
+  homework?: string[];
+  moodStart?: string;
+  moodEnd?: string;
+  reflection?: string;
+  bodyMap?: string[];
+  consent?: boolean;
 }
 
 export interface ResultsPayload {
-  session: { id: string; code: string; alias?: string; completedAt: string };
+  session: {
+    id: string;
+    code: string;
+    alias?: string;
+    completedAt: string;
+    notes?: string;
+    homework: HomeworkCard[];
+    moodStart?: { id: string; label: string };
+    moodEnd?: { id: string; label: string };
+    reflection?: { id: string; label: string };
+    bodyMap: Array<{ id: string; label: string }>;
+    consentAt?: string;
+  };
   results: ResultSummary;
 }
 
@@ -33,6 +61,7 @@ export class SessionService {
     await this.enforceCreateLimit(principal);
     await this.deps.gate?.beforeCreate(principal);
     const pack = catalog.getPack(input.packId);
+    catalog.assertLaunchable(pack);
     const now = clock();
     const session: Session = {
       id: newId(),
@@ -50,6 +79,7 @@ export class SessionService {
     if (input.alias) session.alias = input.alias;
     await repo.create(session);
     events.emit('session.created', { sessionId: session.id, packId: pack.id, keyId: principal.keyId });
+    await this.deps.usage?.created(principal, pack.id).catch(() => undefined);
     return this.view(session);
   }
 
@@ -82,6 +112,7 @@ export class SessionService {
     session.updatedAt = now;
     await repo.save(session);
     events.emit('session.completed', { sessionId: session.id, packId: pack.id, keyId: principal.keyId });
+    await this.deps.usage?.completed(principal, pack.id).catch(() => undefined);
     return this.view(session);
   }
 
@@ -92,13 +123,55 @@ export class SessionService {
       throw new ConflictError('Results are available once the session is completed.');
     }
     const pack = catalog.getPack(session.packId);
+    const extras = session.extras ?? {};
     const summary: ResultsPayload['session'] = {
       id: session.id,
       code: session.code,
       completedAt: session.completedAt,
+      homework: (extras.homework ?? []).filter((id) => this.deps.resources.has(id)).map((id) => this.deps.resources.card(id)),
+      bodyMap: (extras.bodyMap ?? []).map((id) => ({ id, label: labelOf(BODY_ZONES, id) ?? id })),
     };
     if (session.alias) summary.alias = session.alias;
+    if (extras.notes) summary.notes = extras.notes;
+    if (extras.consentAt) summary.consentAt = extras.consentAt;
+    if (extras.moodStart) summary.moodStart = { id: extras.moodStart, label: labelOf(MOODS, extras.moodStart) ?? extras.moodStart };
+    if (extras.moodEnd) summary.moodEnd = { id: extras.moodEnd, label: labelOf(MOODS, extras.moodEnd) ?? extras.moodEnd };
+    if (extras.reflection) summary.reflection = { id: extras.reflection, label: labelOf(REFLECTIONS, extras.reflection) ?? extras.reflection };
     return { session: summary, results: scoring.score(pack, session.responses) };
+  }
+
+  /** Saves optional extras. Allowed before and after completion. Only fixed ids and short text are accepted. */
+  async updateExtras(principal: Principal, id: string, input: ExtrasInput): Promise<SessionView> {
+    const { repo, clock, resources } = this.deps;
+    const session = await this.load(principal, id);
+    const extras: SessionExtras = { ...(session.extras ?? {}) };
+    const pick = (value: string, list: Readonly<Record<string, string>>, what: string): string => {
+      if (!(value in list)) throw new ValidationError(`Unknown ${what}.`);
+      return value;
+    };
+    if (input.notes !== undefined) {
+      if (input.notes.trim()) extras.notes = input.notes.trim().slice(0, 4000);
+      else delete extras.notes;
+    }
+    if (input.homework !== undefined) {
+      const unique = [...new Set(input.homework)];
+      if (unique.some((card) => !resources.has(card))) throw new ValidationError('Unknown homework card.');
+      if (unique.length) extras.homework = unique;
+      else delete extras.homework;
+    }
+    if (input.moodStart !== undefined) extras.moodStart = pick(input.moodStart, MOODS, 'mood');
+    if (input.moodEnd !== undefined) extras.moodEnd = pick(input.moodEnd, MOODS, 'mood');
+    if (input.reflection !== undefined) extras.reflection = pick(input.reflection, REFLECTIONS, 'reflection');
+    if (input.bodyMap !== undefined) {
+      const zones = [...new Set(input.bodyMap)].map((zone) => pick(zone, BODY_ZONES, 'body area'));
+      if (zones.length) extras.bodyMap = zones;
+      else delete extras.bodyMap;
+    }
+    if (input.consent) extras.consentAt = clock().toISOString();
+    session.extras = extras;
+    session.updatedAt = clock().toISOString();
+    await repo.save(session);
+    return this.view(session);
   }
 
   async erase(principal: Principal, id: string): Promise<void> {
@@ -160,6 +233,7 @@ export class SessionService {
       responses: { ...session.responses },
     };
     if (session.alias) view.alias = session.alias;
+    if (session.extras?.consentAt) view.consentAt = session.extras.consentAt;
     return view;
   }
 }

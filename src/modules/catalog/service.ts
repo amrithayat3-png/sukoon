@@ -1,16 +1,34 @@
-import { NotFoundError } from '../../core/errors.js';
+import { ForbiddenError, NotFoundError } from '../../core/errors.js';
 import type { CatalogRepository } from './repository.js';
 import type { Pack, Reference, Track } from './schema.js';
 import type { PackSummary, PatientPackView } from './views.js';
 import { toPatientView, toSummary } from './views.js';
 
 export class CatalogService {
-  constructor(private readonly repo: CatalogRepository) {}
+  /** When true, only packs a psychologist has signed off (status: reviewed) can be listed or started. */
+  constructor(
+    private readonly repo: CatalogRepository,
+    private readonly onlyReviewed = false,
+  ) {}
+
+  private visible(): Pack[] {
+    return this.repo.packs().filter((pack) => !this.onlyReviewed || pack.status === 'reviewed');
+  }
+
+  get reviewedOnly(): boolean {
+    return this.onlyReviewed;
+  }
+
+  assertLaunchable(pack: Pack): void {
+    if (this.onlyReviewed && pack.status !== 'reviewed') {
+      throw new ForbiddenError('This activity is still being reviewed and cannot be started yet.');
+    }
+  }
 
   listTracks(): Array<Track & { packCount: number }> {
     return this.repo.tracks().map((track) => ({
       ...track,
-      packCount: this.repo.packs().filter((pack) => pack.track === track.id).length,
+      packCount: this.visible().filter((pack) => pack.track === track.id).length,
     }));
   }
 
@@ -18,8 +36,7 @@ export class CatalogService {
     if (!this.repo.tracks().some((track) => track.id === trackId)) {
       throw new NotFoundError('Unknown track.');
     }
-    return this.repo
-      .packs()
+    return this.visible()
       .filter((pack) => pack.track === trackId)
       .map(toSummary);
   }
@@ -33,11 +50,16 @@ export class CatalogService {
 
   getPackDetail(packId: string): { summary: PackSummary; patientView: PatientPackView; references: Reference[] } {
     const pack = this.getPack(packId);
+    if (this.onlyReviewed && pack.status !== 'reviewed') throw new NotFoundError('Unknown activity pack.');
     return {
       summary: toSummary(pack),
       patientView: toPatientView(pack),
       references: this.referencesFor(pack),
     };
+  }
+
+  packIds(): string[] {
+    return this.repo.packs().map((pack) => pack.id);
   }
 
   listReferences(): readonly Reference[] {

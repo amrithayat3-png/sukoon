@@ -57,5 +57,24 @@
     "citation": "Substance Abuse and Mental Health Services Administration. SAMHSA's Concept of Trauma and Guidance for a Trauma-Informed Approach. HHS Publication No. (SMA) 14-4884. 2014.",
     "verified": false,
     "note": "Cited from memory. Basis for the trauma-informed principles: safety, choice, transparency, no forced disclosure."
+  },
+  {
+    "id": "lovibond-1995-dass",
+    "citation": "Lovibond, S. H., & Lovibond, P. F. (1995). Manual for the Depression Anxiety & Stress Scales (2nd ed.). Sydney: Psychology Foundation.",
+    "verified": true,
+    "note": "Citation as printed on the DASS-21 scoring sheet supplied by the reviewing psychologist. The sheet states the DASS-21 should not replace a face to face clinical interview."
+  },
+  {
+    "id": "ryff-keyes-1995-pwb",
+    "citation": "Ryff, C. D., & Keyes, C. L. M. (1995). The structure of psychological well-being revisited. Journal of Personality and Social Psychology, 69(4), 719-727.",
+    "verified": true,
+    "note": "Citation as printed on the 18-item Psychological Wellbeing sheet supplied by the reviewing psychologist (also cites Ryff et al., 2010, MIDUS II documentation)."
+  },
+  {
+    "id": "kwon-2013-sas-sv",
+    "citation": "Kwon, M., Kim, D.-J., Cho, H., & Yang, S. (2013). The Smartphone Addiction Scale: Development and validation of a short version for adolescents. PLoS ONE, 8(12), e83558.",
+    "url": "https://doi.org/10.1371/journal.pone.0083558",
+    "verified": true,
+    "note": "Open access (CC BY). Reports reference cut-offs of 31 for boys and 33 for girls from a Korean sample of 540 young adolescents; it is a screening scale, not a diagnosis."
   }
 ]

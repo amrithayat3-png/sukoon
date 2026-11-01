@@ -3,6 +3,7 @@ import { state } from '../state.js';
 import { h, mount, link, errorBox, pageTitle } from '../ui.js';
 import { packIcon, packTone } from '../icons.js';
 import { weatherPicker, worldArt } from '../worlds.js';
+import { consentBlock } from '../legal.js';
 
 export async function packView(root, packId) {
   try {
@@ -14,7 +15,8 @@ export async function packView(root, packId) {
     const alias = h('input', { type: 'text', id: 'alias', maxlength: 40, autocomplete: 'off', 'aria-describedby': 'alias-hint' });
     const pin = h('input', { type: 'text', id: 'pin', inputmode: 'numeric', pattern: '[0-9]{4}', maxlength: 4, autocomplete: 'off', 'aria-describedby': 'pin-hint' });
     const slot = h('div');
-    const start = h('button', { class: 'btn big', type: 'submit' }, 'Start session');
+    const start = h('button', { class: 'btn big', type: 'submit', disabled: true }, 'Start session');
+    const consent = consentBlock((ok) => { start.disabled = !ok; });
     const form = h('form', { class: 'stack', onSubmit: async (e) => {
       e.preventDefault();
       slot.replaceChildren();
@@ -24,6 +26,9 @@ export async function packView(root, packId) {
       try {
         const session = await api.createSession(packId, alias.value.trim() || undefined);
         if (code) state.locks.set(session.id, code);
+        state.queue = null;
+        // Best effort: the activity still runs if this small save fails.
+        await api.extras(session.id, { consent: true, ...(state.mood ? { moodStart: state.mood } : {}) }).catch(() => null);
         location.hash = `#/run/${session.id}`;
       } catch (err) { slot.append(errorBox(err.message)); start.disabled = false; }
     } },
@@ -37,6 +42,7 @@ export async function packView(root, packId) {
           h('label', { for: 'pin' }, 'Return PIN'),
           pin,
           h('p', { class: 'hint', id: 'pin-hint' }, 'A 4-digit code so the screen is handed back before results show. A courtesy lock for the room, not a security feature.'))),
+      consent.node,
       slot, h('div', null, start));
     mount(root,
       h('div', { class: 'crumbs' }, link('#/', 'Home'), ' / ', link(`#/track/${s.track}`, s.track), ' / ', s.title),
@@ -46,9 +52,9 @@ export async function packView(root, packId) {
         h('div', null,
           h('h1', { style: { margin: 0 } }, s.title),
           h('div', { class: 'row' },
-            h('span', { class: 'chip' }, s.format === 'checkin' ? 'Questions' : 'Story choices'),
+            h('span', { class: 'chip' }, s.format === 'scenario' ? 'Story choices' : 'Questions'),
             h('span', { class: 'chip' }, `About ${s.estimatedMinutes} min`),
-            h('span', { class: 'chip' }, `${s.itemCount} ${s.format === 'checkin' ? 'questions' : 'stories'}`))))),
+            h('span', { class: 'chip' }, `${s.itemCount} ${s.format === 'scenario' ? 'stories' : 'questions'}`))))),
       h('p', { style: { fontSize: '1.08rem' } }, s.summary),
       h('div', { class: 'stack' },
         weatherPicker(state),
@@ -57,8 +63,11 @@ export async function packView(root, packId) {
           h('summary', null, 'About this activity'),
           s.clinicianNotes ? h('p', { style: { marginTop: '12px' } }, s.clinicianNotes) : null,
           s.status === 'draft' ? h('p', { class: 'small muted' }, 'Content status: draft. It has not yet been reviewed by a licensed psychologist.') : null,
+          s.source ? h('div', { class: 'notice' }, h('strong', null, 'Published questionnaire. '), s.source.attribution, ' ',
+            h('span', { class: 'chip' }, { 'free-with-citation': 'Free to use with citation', 'open-access-cc-by': 'Open access (CC BY)', 'confirm-before-use': 'Licence to confirm' }[s.source.licence] ?? s.source.licence),
+            s.source.wording === 'confirm-with-publisher' ? h('p', { class: 'small' }, 'Wording should be confirmed with the publisher or author before this activity is marked reviewed.') : null) : null,
           h('h3', null, `Research basis (${detail.references.length})`),
-          h('p', { class: 'muted small' }, 'Topic areas are informed by this published work. Items are original wording.'),
+          h('p', { class: 'muted small' }, s.source ? 'Items follow the published questionnaire.' : 'Topic areas are informed by this published work. Items are original wording.'),
           h('ul', { class: 'refs' }, detail.references.map((r) =>
             h('li', null, r.citation, ' ',
               r.url ? h('a', { href: r.url, target: '_blank', rel: 'noopener noreferrer' }, 'Open source') : null,

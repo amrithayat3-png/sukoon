@@ -134,18 +134,26 @@ function weatherGlyph(kind) {
   return s('svg', { viewBox: '0 0 64 64', class: 'wglyph', 'aria-hidden': 'true', focusable: 'false' }, ...g);
 }
 
-/** Optional warm-up before an activity. Kept on the device only, never sent to the server. */
-export function weatherPicker(state) {
-  const reply = h('p', { class: 'weather-reply', 'aria-live': 'polite' }, state.mood ? WEATHER.find((w) => w[0] === state.mood)?.[2] : 'Tap one. There is no wrong answer.');
+/**
+ * Inner weather. Used before an activity (shared with the psychologist only, erased with the session)
+ * and again at the end. Pass get/set/onPick to reuse it for another moment.
+ */
+export function weatherPicker(state, opts = {}) {
+  const get = opts.get ?? (() => state.mood);
+  const set = opts.set ?? ((v) => { state.mood = v; });
+  const idle = 'Tap one. There is no wrong answer.';
+  const reply = h('p', { class: 'weather-reply', 'aria-live': 'polite' }, get() ? WEATHER.find((w) => w[0] === get())?.[2] : idle);
   const buttons = WEATHER.map(([id, name, text]) => {
-    const b = h('button', { class: 'weather', type: 'button', 'aria-pressed': String(state.mood === id), onClick: () => {
-      state.mood = state.mood === id ? null : id;
-      for (const x of buttons) x.setAttribute('aria-pressed', String(x.dataset.id === state.mood));
-      reply.textContent = state.mood ? text : 'Tap one. There is no wrong answer.';
+    const b = h('button', { class: 'weather', type: 'button', 'aria-pressed': String(get() === id), onClick: () => {
+      set(get() === id ? null : id);
+      for (const x of buttons) x.setAttribute('aria-pressed', String(x.dataset.id === get()));
+      reply.textContent = get() ? text : idle;
+      opts.onPick?.(get());
     } }, weatherGlyph(id), h('span', null, name));
     b.dataset.id = id;
     return b;
   });
-  return h('section', { class: 'card' }, h('h2', null, 'What is the weather like inside today?'), h('div', { class: 'weather-row', role: 'group', 'aria-label': 'Inner weather' }, buttons), reply,
-    h('p', { class: 'small muted' }, 'This stays on this screen. It is not saved or sent anywhere.'));
+  return h('section', { class: 'card' }, h('h2', null, opts.title ?? 'What is the weather like inside today?'),
+    h('div', { class: 'weather-row', role: 'group', 'aria-label': 'Inner weather' }, buttons), reply,
+    h('p', { class: 'small muted' }, opts.note ?? 'Only your psychologist sees this, and it is erased with the session.'));
 }

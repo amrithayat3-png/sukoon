@@ -1,0 +1,207 @@
+{
+  "id": "seniors-wellbeing-ryff-18",
+  "version": "0.1.0",
+  "track": "seniors",
+  "audience": [
+    "general"
+  ],
+  "title": "Psychological Wellbeing (18 items)",
+  "summary": "A short check of six areas of wellbeing: autonomy, mastery, growth, relationships, purpose and self-acceptance.",
+  "status": "draft",
+  "estimatedMinutes": 5,
+  "references": [
+    "ryff-keyes-1995-pwb"
+  ],
+  "clinicianNotes": "Published 18-item Ryff Psychological Wellbeing measure (3 items per area, 7-point agree scale). Items 1, 2, 3, 8, 9, 11, 12, 13, 17 and 18 are reverse scored, as in the supplied scoring sheet. Each area is a sum of 3 items (3 to 21); higher means higher wellbeing. The sheet gives no cut-offs or norms, so results are shown as bars without bands. The sheet gives no licence line: the reviewing psychologist should confirm the wording may be used before this pack is marked reviewed.",
+  "format": "measure",
+  "prompt": "Please choose how much you agree or disagree with each statement.",
+  "scale": [
+    {
+      "value": 1,
+      "label": "Strongly agree"
+    },
+    {
+      "value": 2,
+      "label": "Somewhat agree"
+    },
+    {
+      "value": 3,
+      "label": "A little agree"
+    },
+    {
+      "value": 4,
+      "label": "Neither agree nor disagree"
+    },
+    {
+      "value": 5,
+      "label": "A little disagree"
+    },
+    {
+      "value": 6,
+      "label": "Somewhat disagree"
+    },
+    {
+      "value": 7,
+      "label": "Strongly disagree"
+    }
+  ],
+  "source": {
+    "licence": "confirm-before-use",
+    "attribution": "Psychological Wellbeing 18-item version (Ryff & Keyes, 1995), as listed in the SPARQtools.org Measuring Mobility toolkit; MIDUS II documentation (Ryff et al., 2010).",
+    "wording": "confirm-with-publisher"
+  },
+  "subscales": [
+    {
+      "id": "autonomy",
+      "label": "Autonomy",
+      "description": "Independence of thought and standing by your own views.",
+      "polarity": "protective",
+      "multiplier": 1
+    },
+    {
+      "id": "mastery",
+      "label": "Environmental mastery",
+      "description": "Feeling able to manage daily life and surroundings.",
+      "polarity": "protective",
+      "multiplier": 1
+    },
+    {
+      "id": "growth",
+      "label": "Personal growth",
+      "description": "Feeling open to learning and continuing to develop.",
+      "polarity": "protective",
+      "multiplier": 1
+    },
+    {
+      "id": "relations",
+      "label": "Positive relations with others",
+      "description": "Warm, trusting and satisfying relationships.",
+      "polarity": "protective",
+      "multiplier": 1
+    },
+    {
+      "id": "purpose",
+      "label": "Purpose in life",
+      "description": "Having goals and a sense that life has direction.",
+      "polarity": "protective",
+      "multiplier": 1
+    },
+    {
+      "id": "self",
+      "label": "Self-acceptance",
+      "description": "A positive attitude toward yourself and your past.",
+      "polarity": "protective",
+      "multiplier": 1
+    }
+  ],
+  "items": [
+    {
+      "id": "pwb-01",
+      "subscale": "self",
+      "text": "I like most parts of my personality.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-02",
+      "subscale": "self",
+      "text": "When I look at the story of my life, I am pleased with how things have turned out so far.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-03",
+      "subscale": "purpose",
+      "text": "Some people wander aimlessly through life, but I am not one of them.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-04",
+      "subscale": "mastery",
+      "text": "The demands of everyday life often get me down.",
+      "reverse": false
+    },
+    {
+      "id": "pwb-05",
+      "subscale": "self",
+      "text": "In many ways I feel disappointed about my achievements in life.",
+      "reverse": false
+    },
+    {
+      "id": "pwb-06",
+      "subscale": "relations",
+      "text": "Maintaining close relationships has been difficult and frustrating for me.",
+      "reverse": false
+    },
+    {
+      "id": "pwb-07",
+      "subscale": "purpose",
+      "text": "I live life one day at a time and don't really think about the future.",
+      "reverse": false
+    },
+    {
+      "id": "pwb-08",
+      "subscale": "mastery",
+      "text": "In general, I feel I am in charge of the situation in which I live.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-09",
+      "subscale": "mastery",
+      "text": "I am good at managing the responsibilities of daily life.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-10",
+      "subscale": "purpose",
+      "text": "I sometimes feel as if I've done all there is to do in life.",
+      "reverse": false
+    },
+    {
+      "id": "pwb-11",
+      "subscale": "growth",
+      "text": "For me, life has been a continuous process of learning, changing, and growth.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-12",
+      "subscale": "growth",
+      "text": "I think it is important to have new experiences that challenge how I think about myself and the world.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-13",
+      "subscale": "relations",
+      "text": "People would describe me as a giving person, willing to share my time with others.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-14",
+      "subscale": "growth",
+      "text": "I gave up trying to make big improvements or changes in my life a long time ago.",
+      "reverse": false
+    },
+    {
+      "id": "pwb-15",
+      "subscale": "autonomy",
+      "text": "I tend to be influenced by people with strong opinions.",
+      "reverse": false
+    },
+    {
+      "id": "pwb-16",
+      "subscale": "relations",
+      "text": "I have not experienced many warm and trusting relationships with others.",
+      "reverse": false
+    },
+    {
+      "id": "pwb-17",
+      "subscale": "autonomy",
+      "text": "I have confidence in my own opinions, even if they are different from the way most other people think.",
+      "reverse": true
+    },
+    {
+      "id": "pwb-18",
+      "subscale": "autonomy",
+      "text": "I judge myself by what I think is important, not by the values of what others think is important.",
+      "reverse": true
+    }
+  ]
+}
