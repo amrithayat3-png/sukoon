@@ -1,1 +1,1 @@
-v8 clinical measures (DASS-21, PWB-18, SAS-SV), printable report, session notes, homework cards, tools, usage, consent
+v8.1 clinical measures plus visual polish (sign-in, surfaces)

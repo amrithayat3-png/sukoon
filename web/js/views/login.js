@@ -3,6 +3,14 @@ import { state } from '../state.js';
 import { h, mount, errorBox, pageTitle } from '../ui.js';
 import { logo } from '../icons.js';
 
+/** Shared look for the sign-in cards: big logo, title, calm subtitle, small trust line. */
+function authShell(form, title, subtitle) {
+  return h('div', { class: 'auth' },
+    h('div', { class: 'auth-head' }, h('div', { class: 'auth-logo' }, logo(64)), h('h1', null, title), h('p', { class: 'muted' }, subtitle)),
+    form,
+    h('p', { class: 'auth-foot small muted' }, h('span', { class: 'lock', 'aria-hidden': 'true' }), 'Private by design. Session answers are erased automatically.'));
+}
+
 const field = (id, label, attrs, hint) => h('div', { class: 'field' }, h('label', { for: id }, label), h('input', { id, required: true, ...attrs }), hint ? h('p', { class: 'hint' }, hint) : null);
 
 /** Sign in. With accounts on, psychologists use email and password, or join an institute with an invite code. */
@@ -12,7 +20,7 @@ export function loginView(root) {
   const input = h('input', { type: 'password', id: 'key', autocomplete: 'off', required: true, 'aria-describedby': 'key-hint' });
   const slot = h('div');
   const submit = h('button', { class: 'btn', type: 'submit' }, 'Continue');
-  const form = h('form', { class: 'card stack', onSubmit: async (e) => {
+  const form = h('form', { class: 'card auth-card stack', onSubmit: async (e) => {
     e.preventDefault();
     slot.replaceChildren();
     submit.disabled = true;
@@ -24,13 +32,12 @@ export function loginView(root) {
       slot.append(errorBox(err.status === 401 ? 'That access key was not recognised.' : err.message));
     } finally { submit.disabled = false; }
   } },
-    h('div', { class: 'row' }, logo(44), h('h2', { style: { margin: 0 } }, 'Welcome to Sukoon')),
     h('div', { class: 'field' },
       h('label', { for: 'key' }, 'Access key'),
       input,
       h('p', { class: 'hint', id: 'key-hint' }, 'Your key was issued to you by the Sukoon team.')),
     slot, submit);
-  mount(root, h('div', { style: { maxWidth: '480px', margin: '32px auto' } }, form));
+  mount(root, authShell(form, 'Welcome to Sukoon', 'Enter the access key from the Sukoon team to begin.'));
 }
 
 function accountForm(root, creating) {
@@ -41,7 +48,7 @@ function accountForm(root, creating) {
   const pw = field('pw', 'Password', { type: 'password', autocomplete: creating ? 'new-password' : 'current-password', minlength: creating ? 8 : 1, maxlength: 100 }, creating ? 'At least 8 characters.' : null);
   const val = (f) => f.querySelector('input').value;
   const submit = h('button', { class: 'btn big', type: 'submit' }, creating ? 'Create my account' : 'Sign in');
-  const form = h('form', { class: 'card stack', onSubmit: async (e) => {
+  const form = h('form', { class: 'card auth-card stack', onSubmit: async (e) => {
     e.preventDefault();
     slot.replaceChildren();
     submit.disabled = true;
@@ -53,8 +60,7 @@ function accountForm(root, creating) {
       location.hash = '#/';
     } catch (err) { slot.append(errorBox(err.message)); submit.disabled = false; }
   } },
-    h('div', { class: 'row' }, logo(44), h('h2', { style: { margin: 0 } }, creating ? 'Join your institute' : 'Welcome back')),
     name, code, email, pw, slot, submit,
     h('button', { class: 'btn ghost', type: 'button', onClick: () => accountForm(root, !creating) }, creating ? 'I already have an account' : 'I have an invite code'));
-  mount(root, h('div', { style: { maxWidth: '480px', margin: '32px auto' } }, form));
+  mount(root, authShell(form, creating ? 'Join your institute' : 'Welcome back', creating ? 'Use the invite code your institute received.' : 'Sign in to continue your sessions.'));
 }

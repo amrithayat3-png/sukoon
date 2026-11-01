@@ -86,6 +86,7 @@ function route() {
   root.className = '';
   window.speechSynthesis?.cancel();
   const pm = path.startsWith('/run/') || path.startsWith('/done/') || path === '/login';
+  document.body.classList.toggle('login-mode', path === '/login');
   fab.hidden = pm || (!state.open && !keyStore.get());
   document.body.classList.toggle('patient-mode', path.startsWith('/run/') || path.startsWith('/done/'));
   for (const [pattern, view, needsKey = true] of routes) {
